@@ -110,7 +110,6 @@ cat_C <- map %>%filter(quints == 3)
 cat_D<- map %>% filter(quints == 4)
 cat_E <- map %>% filter(quints == 5)
 
-mapDat <- rio::import("data/globalMapData.rds")
 map_cat<- highchart(type = "map") %>%
   hc_plotOptions(map = list(
     allAreas = FALSE,
