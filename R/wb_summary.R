@@ -42,6 +42,7 @@ short_name<- substr(metadata$indicator,1, 25)
 unit<-ifelse(!is.na(unique(metadata$unit)),unique(metadata$unit), "Value")
 
 top<-latest_data%>%top_n(15, wt = value)
+top<-top%>%arrange(value)
 bottom<-latest_data%>%top_n(-15, wt = value)
 bottom<-bottom%>%arrange(value)
 
