@@ -33,12 +33,10 @@ latest_data<- pop_data %>%
   slice(1) %>%
   ungroup
 
-latest_data<-latest_data%>%arrange(desc(value))
 
 #subtitle<-unique(wide_indicators_bar$ihme_indicator_description)
 title<-unique(metadata$indicator)
 subtitle<-unique(metadata$indicatorDesc)
-
 source<-ifelse(!is.na(unique(metadata$sourceOrg)), unique(metadata$sourceOrg), "World Bank")
 short_name<- substr(metadata$indicator,1, 25)
 unit<-ifelse(!is.na(unique(metadata$unit)),unique(metadata$unit), "Value")
@@ -48,7 +46,7 @@ bottom<-latest_data%>%top_n(-15, wt = value)
 bottom<-bottom%>%arrange(value)
 
 
-topcountries<-  hchart(top, "bar",name=short_name, hcaes(country,value,name=unique(latest_data$indicatorID)))%>%
+topcountries<-  hchart(top, "bar",name=short_name, hcaes(country,value))%>%
  # hc_size(height=height)%>%
   hc_title(text=title)%>%
   hc_subtitle(text=subtitle)%>%
@@ -60,7 +58,7 @@ topcountries<-  hchart(top, "bar",name=short_name, hcaes(country,value,name=uniq
   hc_add_theme(hc_theme_tufte())
 
 
-bottomcountries<-  hchart(bottom, "bar",name=short_name, hcaes(country,value,name=unique(latest_data$indicatorID)))%>%
+bottomcountries<-  hchart(bottom, "bar",name=short_name, hcaes(country,value))%>%
   # hc_size(height=height)%>%
   hc_title(text=title)%>%
   hc_subtitle(text=subtitle)%>%
