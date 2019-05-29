@@ -33,16 +33,16 @@ latest_data<- pop_data %>%
   slice(1) %>%
   ungroup
 
-
+indicator_list<- strsplit(unique(metadata$indicator), '[()]')
 #subtitle<-unique(wide_indicators_bar$ihme_indicator_description)
-title<-unique(metadata$indicator)
+title<-indicator_list[[1]][1]
 subtitle<-unique(metadata$indicatorDesc)
 source<-ifelse(!is.na(unique(metadata$sourceOrg)), unique(metadata$sourceOrg), "World Bank")
 short_name<- substr(metadata$indicator,1, 25)
-unit<-ifelse(!is.na(unique(metadata$unit)),unique(metadata$unit), "Value")
+unit<-ifelse(!is.na(unique(metadata$unit)),unique(metadata$unit), indicator_list[[1]][2])
 
 top<-latest_data%>%top_n(15, wt = value)
-top<-top%>%arrange(value)
+top<-top%>%arrange(desc(value))
 bottom<-latest_data%>%top_n(-15, wt = value)
 bottom<-bottom%>%arrange(value)
 
@@ -82,7 +82,7 @@ tt<- str_replace(tt, "<table>", "<table style=\"padding-bottom: 5px\"/>")
 library(htmltools)
 t4<- str_replace(tt, "<th>country_name", paste0("<th>",short_name, ":"))
 t4<-HTML(paste0("<img src=\"{point.flagicon}\" />&nbsp; <b> {point.name} </b><table style=\"padding-bottom: 5px\"/>\n
- <th>", short_name,"</th>\n <tr>\n <td> <font color='#0da094'> <b> {point.", "unscaled_value", "} ", unit ," </font></b></td> \n
+ <th>", short_name,"</th>\n <tr>\n <td> <font color='#0da094'> <b> {point.", "value", "} ", unit ," </font></b></td> \n
   </tr>\n <tr>\n <td> <b>{point.quints_rec}</b></td> \n </tr>\n </table>"))
 
 map <- latest_data %>% mutate(flagicon = sprintf(urlico, iso2c),flagicon = str_replace_all(flagicon, "url\\(|\\)", ""))
