@@ -15,6 +15,8 @@
 #'
 #'
 #' @export
+#'
+# indicator<-'SH.ALC.PCAP.LI'
 wbPlots <- function(indicator) {
 library(highcharter)
 library(wbstats)
@@ -141,13 +143,13 @@ map_cat<- highchart(type = "map") %>%
 map2<- highchart(type = "map") %>%
   hc_plotOptions(map = list(
     allAreas = FALSE,
-    borderColor = "#FAFAFA",
+    borderColor = c("#3D3D3D"),
     borderWidth = 0.4,
     tooltip = list(valueDecimals = 2),
     joinBy =  c("iso-a3", "iso3c"  ),
     mapData = mapDat
   )) %>%
-  hc_add_series(name = "Quintile 1 (Lowest)", data = cat_A, color = "#efff33") %>%
+  hc_add_series(name = "Quintile 1 (Lowest)", data = cat_A, color = c("#FF7F24")) %>%
   hc_add_series(name = "Q2", data = cat_B, color = "#00000") %>%
   hc_add_series(name = "Q3", data = cat_C, color = "#000000")%>%
   hc_add_series(name = "Q4", data = cat_D, color = "#000000") %>%
