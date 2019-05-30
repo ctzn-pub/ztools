@@ -170,7 +170,7 @@ map2<- highchart(type = "map") %>%
 library( rnaturalearth )
 library( topogram )
 
-sf_world <- ne_countries(scale = 110,continent = c("europe", "australia" , "asia", "north america", "south america", "africa"), returnclass = "sf")
+sf_world <- ne_countries(scale = 110,continent = c("europe", "Oceania" , "asia", "north america", "south america", "africa"), returnclass = "sf")
 # Add a numeric column
 latest_data_small<-latest_data%>%select(iso3c, value)
 sf_world<-left_join(sf_world, latest_data_small, by = c("iso_a3" = "iso3c") )
@@ -178,7 +178,8 @@ sf_world$value[is.na(sf_world$value)] <- 0
 sf_world<-sf_world%>%mutate(value = value + .05)
 
 # Create cartogram
-cartogram<- topogram( shape = sf_world,
+cartogram<- topogram( shape
+                      = sf_world,
   value = "value")
 
 
