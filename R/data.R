@@ -7,3 +7,7 @@ use_data(countrydata, overwrite = TRUE)
 
 globalMapData<- import("/Users/umahuggins/Dropbox/ON/Projects/World/visualization/globalMapData.rds")
 use_data(globalMapData, overwrite = TRUE)
+
+
+UNSD<- import("/Users/umahuggins/Dropbox/ON/Projects/World/Meta/data/UNSD — Methodology.csv")
+use_data(UNSD, overwrite = TRUE)
