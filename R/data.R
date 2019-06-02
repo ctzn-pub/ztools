@@ -11,3 +11,11 @@ library(usethis)
 #From https://unstats.un.org/unsd/methodology/m49/overview/
 #UNSD<- import("/Users/umahuggins/Dropbox/ON/Projects/World/Meta/data/UNSD — Methodology.xlsx")
 #use_data(UNSD, overwrite = TRUE)
+
+
+#mapDat <- download_map_data("custom/world-highres")
+#export(mapDat, "./../globalMapData.rds")
+
+#library(highcharter)
+#euroMapData <- download_map_data("custom/europe")
+#use_data(euroMapData, overwrite = TRUE)
