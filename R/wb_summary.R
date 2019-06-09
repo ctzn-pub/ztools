@@ -22,7 +22,7 @@ library(highcharter)
 library(wbstats)
 
 
-pop_data <- wb(indicator = indicator,  startdate = 1980, enddate = 2018)
+pop_data <- wb(indicator = indicator,  startdate = 2000, enddate = 2018)
 
 #pop_data <- wb(indicator = "SH.ALC.PCAP.LI",  startdate = 1980, enddate = 2018)
 #metadata<- wbsearch("SH.ALC.PCAP.LI", fields=c("indicatorID"),extra = TRUE)
