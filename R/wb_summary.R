@@ -1,16 +1,12 @@
 
 
 #install.packages("highcharter")
-#' Making plots from
+#' Making plots from a world bank indicator
 #'
-#' Based on Highcharter Google theme.
+#' A function that takes a world band indicator and subsets to cross sectional data from the latest observation for each country. Returns 5 plots: Top Countries, Bottom Countries, Continuous Map, Discrete Map & A topogram, in that order.
 #'
-#' @param ... Named argument to modify the theme
+#' @param indicator This should be an indicator, eg. "SH.ALC.PCAP.LI"
 #'
-#'
-#'
-#' highcharts_demo() %>%
-#'   hc_add_theme(hc_theme_ctzn())
 #'
 #'
 #'

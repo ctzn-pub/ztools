@@ -18,7 +18,7 @@
 
 #' CPUB theme for highcharts
 #'
-#' Based on Highcharter Google theme.
+#' Out theme, Based on Highcharter Google theme.
 #'
 #' @param ... Named argument to modify the theme
 #'

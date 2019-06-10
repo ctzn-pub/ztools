@@ -1,5 +1,21 @@
 
-#' @param tabID, list_of_tabs,height
+#' Mouseover Tabsets Optimized for Distill Rmd Articles
+#'
+#' Our tabets, made for Distill articles in R markdown. Returns the HTML code needed to load various scripts used and takes a list of tab names/iframe content as arguments.
+#'
+#' @param tabID
+#'
+#'A number, 1-9 (needs a unique ID to distinguish from other tabsets
+#')
+#' @param list_of_tabs
+#'
+#' A list of named vectors with a tab title & url for content
+#'
+#' @param height
+#'
+#'Desired height.
+#'
+#' @param icon optional; takes a fontawesome identifier to add an icon
 #'
 #' @examples
 #'
