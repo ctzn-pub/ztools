@@ -1,0 +1,203 @@
+---
+title: "Happiness in Europe"
+params:
+  varname: "happy"
+  chunks_to_run: "all"
+author:
+  - name: cpub
+    url: https://ctzn.pub/happy_temp
+    affiliation: the Citizen Science Lab
+    affiliation_url: https://ctzn.pub
+date: "`r Sys.Date()`"
+output: radix::radix_article
+---
+<style>
+
+d-title ul {
+    grid-column: text;
+    list-style-type: none;
+    padding-inline-start: 0;
+  }
+
+
+d-title ul a:hover {
+    text-decoration: underline;
+    text-decoration-color: #FF7A21;
+}
+
+#tabs3 .ui-widget-header {
+background: transparent;
+border: none;
+border-bottom: 0 solid #c0c0c0 !important;
+-moz-border-radius: 0;
+-webkit-border-radius: 0;
+border-radius: 0;
+text-align: center;
+}
+
+#tabs3 .ui-tabs-nav .ui-state-active a {
+border-bottom: 1px solid #FF7A21 !important;
+}
+.toc {
+  display: flex;
+  color: #333;
+    background-color: hsla(206, 90%, 20%, 0.03);
+  border-left: 3px solid hsla(206, 50%, 20%, 0.8);
+  padding: 1em 2em;
+  margin-bottom: 1em;
+  counter-increment: problem;
+}
+
+
+d-title ul li {
+  display: flex;
+  flex-flow: row;
+}
+
+d-title li {
+  margin-bottom: .75em;
+}
+
+
+.chapter {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif !important;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-right: 2em;
+  white-space: nowrap;
+}
+
+d-title ul a {
+  color: rgba(0, 0, 0, 0.8);
+  text-decoration: none;
+  border-bottom: none;
+  font-size: 0.999999rem;
+  line-height: 1.8em;
+}
+
+ 
+
+</style>
+
+
+
+
+```{r}
+
+
+
+toc_function<-function(toc){
+pacman::p_load(shiny, stringr)
+  toc1<- tags$ul( class="toc", style="display: block;",
+                  tags$link(rel = "stylesheet",  href="https://www.onmundo.org/cpub/design/toc_style.css", integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/", crossorigin="anonymous" ),
+                  
+                  tags$link(rel = "stylesheet",  href="https://use.fontawesome.com/releases/v5.6.3/css/all.css", integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/", crossorigin="anonymous" ),
+                  tags$table(style="width:100%",(lapply( 1:length(toc),function(tocnum){
+                    tags$tr(
+
+                      if (!is.na(toc[[tocnum]]["icon"])){tags$td( style="width:20%" , tags$span(class = "chapter",tags$i(class = toc[[tocnum]][['icon']]),
+                                                                                                (tags$a(class = "chapter", href = paste0("#",gsub(" ", "-",trimws(
+                                                                                                  gsub('^\\.',"", gsub("^\\d+|", "",tolower(toc[[tocnum]]['title'])))))), toc[[tocnum]]['title']))))}
+                      else{ tags$td( style="width:20%" , tags$span(class = "chapter", (tags$a(class = "chapter", href = paste0("#",gsub(" ", "-",trimws(
+                        gsub('^\\.',"", gsub("^\\d+|", "",tolower(toc[[tocnum]]['title'])))))), toc[[tocnum]]['title']))))},
+
+                      tags$td(tags$a(href = paste0("#",gsub(" ", "-",trimws(
+                        gsub('^\\.',"", gsub("^\\d+|", "",tolower(toc[[tocnum]]['title'])))))), toc[[tocnum]]['description']))
+                    )
+                  }))))
+
+
+
+  toc1<- gsub("[\t\n\r\v\f]", "", toc1)
+  str_squish(toc1)
+
+
+}
+
+
+
+
+toc <- list(
+ c(title = "1. Overview", description = "this is the overview of our document"),
+ c(title = "2. This 2nd section", icon = "fas fa-bezier-curve", description = "second section covers other stuff"),
+ c(title = "2a. Overview again", description = "this is the overview") )
+```
+
+
+```{r, eval = FALSE}
+
+toc_function<-function(toc){
+
+toc1<- tags$ul( class="toc", style="display: block;",
+                tags$link(rel = "stylesheet",  href="https://use.fontawesome.com/releases/v5.6.3/css/all.css", integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/", crossorigin="anonymous" ),
+         tags$table(style="width:100%",(lapply( 1:length(toc),function(tocnum){
+               tags$tr(
+                      
+if (!is.na(toc[[tocnum]]["icon"])){tags$td( style="width:20%" , tags$span(class = "chapter",tags$i(class = toc[[tocnum]][['icon']]), 
+                                                                          (tags$a(class = "chapter", href = paste0("#",gsub(" ", "-",trimws(
+gsub('^\\.',"", gsub("^\\d+|", "",tolower(toc[[tocnum]]['title'])))))), toc[[tocnum]]['title']))))}
+else{ tags$td( style="width:20%" , tags$span(class = "chapter", (tags$a(class = "chapter", href = paste0("#",gsub(" ", "-",trimws(
+gsub('^\\.',"", gsub("^\\d+|", "",tolower(toc[[tocnum]]['title'])))))), toc[[tocnum]]['title']))))},
+
+               tags$td(tags$a(href = paste0("#",gsub(" ", "-",trimws(
+gsub('^\\.',"", gsub("^\\d+|", "",tolower(toc[[tocnum]]['title'])))))), toc[[tocnum]]['description']))
+)
+         }))))
+    
+
+
+toc1<- gsub("[\t\n\r\v\f]", "", toc1)
+str_squish(toc1)
+
+
+}
+
+
+
+
+```
+
+
+---
+description: |
+  This file provides template for variable "happy" in ESS. `r toc_function(toc)`
+---
+
+
+## 1. Overview
+
+
+
+'/Applications/RStudio 2.app/Contents/MacOS/pandoc/pandoc' +RTS -K512m -RTS remove_styling.utf8.md --to html5 --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash --output remove_styling.html --email-obfuscation none --self-contained --standalone --no-highlight --template /Library/Frameworks/R.framework/Verinclude-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0220dd9e9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a06b7083b9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a054d828ehtml --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a029eed042html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a03e382831html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a042a563fchtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a048debe0dhtml --include-after-body 
+ markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash --output remove_styling.html --email-obfuscation none --self-contained --standalone --no-highlight --template /Li
+ 
+R.framework/Versions/3.5/Resources/library/radix/rmarkdown/templates/radix_article/resources/distill.lua '--metadata=link-citations:true' --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a01809a3chtml --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05396cf27html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0220dd9e9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a06b7083b9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a054d828ehtml --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a029eed042html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a03e382831html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a042a563fchtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a048debe0dhtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05eda7469html --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0c1e2cb9html --include-in-
+
+R.framework/Versions/3.5/Resources/library/radix/rmarkdown/templates/radix_article/resources/distill.lua '--metadata=link-citations:true' --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a01809a3chtml --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05396cf27html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0220dd9e9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a06b7083b9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a054d828ehtml --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a029eed042html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a03e382831html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a042a563fchtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a048debe0dhtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05eda7469html --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0c1e2cb9html --include-in-
+
+R.framework/Versions/3.5/Resources/library/radix/rmarkdown/templates/radix_article/resources/distill.lua '--metadata=link-citations:true' --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a01809a3chtml --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05396cf27html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0220dd9e9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a06b7083b9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a054d828ehtml --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a029eed042html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a03e382831html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a042a563fchtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a048debe0dhtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05eda7469html --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0c1e2cb9html --include-in-
+
+ 
+ 
+## 2. This 2nd section
+
+
+R.framework/Versions/3.5/Resources/library/radix/rmarkdown/templates/radix_article/resources/distill.lua '--metadata=link-citations:true' --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a01809a3chtml --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05396cf27html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0220dd9e9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a06b7083b9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a054d828ehtml --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a029eed042html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a03e382831html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a042a563fchtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a048debe0dhtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05eda7469html --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0c1e2cb9html --include-in-
+
+R.framework/Versions/3.5/Resources/library/radix/rmarkdown/templates/radix_article/resources/distill.lua '--metadata=link-citations:true' --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a01809a3chtml --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05396cf27html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0220dd9e9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a06b7083b9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a054d828ehtml --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a029eed042html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a03e382831html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a042a563fchtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a048debe0dhtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05eda7469html --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0c1e2cb9html --include-in-
+
+R.framework/Versions/3.5/Resources/library/radix/rmarkdown/templates/radix_article/resources/distill.lua '--metadata=link-citations:true' --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a01809a3chtml --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05396cf27html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0220dd9e9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a06b7083b9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a054d828ehtml --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a029eed042html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a03e382831html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a042a563fchtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a048debe0dhtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05eda7469html --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0c1e2cb9html --include-in-
+
+
+## 2a. Overview again
+
+
+R.framework/Versions/3.5/Resources/library/radix/rmarkdown/templates/radix_article/resources/distill.lua '--metadata=link-citations:true' --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a01809a3chtml --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05396cf27html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0220dd9e9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a06b7083b9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a054d828ehtml --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a029eed042html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a03e382831html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a042a563fchtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a048debe0dhtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05eda7469html --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0c1e2cb9html --include-in-
+
+R.framework/Versions/3.5/Resources/library/radix/rmarkdown/templates/radix_article/resources/distill.lua '--metadata=link-citations:true' --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a01809a3chtml --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05396cf27html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0220dd9e9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a06b7083b9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a054d828ehtml --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a029eed042html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a03e382831html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a042a563fchtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a048debe0dhtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05eda7469html --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0c1e2cb9html --include-in-
+
+R.framework/Versions/3.5/Resources/library/radix/rmarkdown/templates/radix_article/resources/distill.lua '--metadata=link-citations:true' --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a01809a3chtml --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05396cf27html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0220dd9e9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a06b7083b9html --include-in-header /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a054d828ehtml --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a029eed042html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a03e382831html --include-before-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a042a563fchtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a048debe0dhtml --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a05eda7469html --include-after-body /var/folders/4j/7zjlsp950nzdf7y7qcxt37200000gn/T//RtmpyCo9iW/file120a0c1e2cb9html --include-in-

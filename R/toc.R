@@ -21,15 +21,19 @@
 
 
 toc_function<-function(toc){
-  pacman::p_load(shiny, stringr)
+pacman::p_load(shiny, stringr)
   toc1<- tags$ul( class="toc", style="display: block;",
-                  tags$link(rel="stylesheet", href="https://www.onmundo.org/cpub/design/toc_style.css"),
+                  tags$link(rel = "stylesheet",  href="https://www.onmundo.org/cpub/design/toc_style.css", integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/", crossorigin="anonymous" ),
+
                   tags$link(rel = "stylesheet",  href="https://use.fontawesome.com/releases/v5.6.3/css/all.css", integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/", crossorigin="anonymous" ),
                   tags$table(style="width:100%",(lapply( 1:length(toc),function(tocnum){
                     tags$tr(
 
-                      if (!is.na(toc[[tocnum]]["icon"])){tags$td( style="width:20%" , tags$span(class = "chapter",tags$i(class = toc[[tocnum]][['icon']]), toc[[tocnum]]['title']))}
-                      else{ tags$td( style="width:20%" , tags$span(class = "chapter", toc[[tocnum]]['title']))},
+                      if (!is.na(toc[[tocnum]]["icon"])){tags$td( style="width:20%" , tags$span(class = "chapter",tags$i(class = toc[[tocnum]][['icon']]),
+                                                                                                (tags$a(class = "chapter", href = paste0("#",gsub(" ", "-",trimws(
+                                                                                                  gsub('^\\.',"", gsub("^\\d+|", "",tolower(toc[[tocnum]]['title'])))))), toc[[tocnum]]['title']))))}
+                      else{ tags$td( style="width:20%" , tags$span(class = "chapter", (tags$a(class = "chapter", href = paste0("#",gsub(" ", "-",trimws(
+                        gsub('^\\.',"", gsub("^\\d+|", "",tolower(toc[[tocnum]]['title'])))))), toc[[tocnum]]['title']))))},
 
                       tags$td(tags$a(href = paste0("#",gsub(" ", "-",trimws(
                         gsub('^\\.',"", gsub("^\\d+|", "",tolower(toc[[tocnum]]['title'])))))), toc[[tocnum]]['description']))
@@ -43,4 +47,6 @@ toc_function<-function(toc){
 
 
 }
+
+
 
