@@ -29,7 +29,7 @@ toc_function<-function(toc){
                     tags$tr(
 
                       if (!is.na(toc[[tocnum]]["icon"])){tags$td( style="width:20%" , tags$span(class = "chapter",tags$i(class = toc[[tocnum]][['icon']]), toc[[tocnum]]['title']))}
-                      else{ tags$td( style="width:20%" , tags$span(class = "chapter",tags$i(class = toc[[tocnum]][['icon']]), toc[[tocnum]]['title']))},
+                      else{ tags$td( style="width:20%" , tags$span(class = "chapter", toc[[tocnum]]['title']))},
 
                       tags$td(tags$a(href = paste0("#",gsub(" ", "-",trimws(
                         gsub('^\\.',"", gsub("^\\d+|", "",tolower(toc[[tocnum]]['title'])))))), toc[[tocnum]]['description']))
