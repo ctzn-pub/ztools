@@ -19,11 +19,10 @@
 #'
 #'
 
-
 toc_function<-function(toc){
-pacman::p_load(shiny, stringr)
+  pacman::p_load(shiny, stringr)
   toc1<- tags$ul( class="toc", style="display: block;",
-                  tags$link(rel = "stylesheet",  href="https://www.onmundo.org/cpub/design/toc_style.css", integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/", crossorigin="anonymous" ),
+                  tags$link(rel = "stylesheet",  href="https://onmundo.org/cpub/design/toc_style.css", integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/", crossorigin="anonymous" ),
 
                   tags$link(rel = "stylesheet",  href="https://use.fontawesome.com/releases/v5.6.3/css/all.css", integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/", crossorigin="anonymous" ),
                   tags$table(style="width:100%",(lapply( 1:length(toc),function(tocnum){
@@ -47,6 +46,5 @@ pacman::p_load(shiny, stringr)
 
 
 }
-
 
 

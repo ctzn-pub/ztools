@@ -168,7 +168,7 @@ str_squish(toc1)
 
 ---
 description: |
-  This file provides template for variable "happy" in ESS. `r  toc_function(toc)`
+  This file provides template for variable "happy" in ESS. `r  ztools::toc_function(toc)`
 ---
 
 
