@@ -1,3 +1,10 @@
+d-title ul a:hover {
+    text-decoration: none;
+    border-bottom: 10px #FF7A21;
+    text-decoration: none;
+    border-bottom: 1.5px solid #FF7A21;
+}
+
 d-title ul {
     grid-column: text;
     list-style-type: none;
@@ -5,10 +12,7 @@ d-title ul {
   }
 
 
-d-title ul a:hover {
-    text-decoration: underline;
-    text-decoration-color: #FF7A21;
-}
+
 
 #tabs3 .ui-widget-header {
 background: transparent;
@@ -60,6 +64,6 @@ d-title ul a {
   color: rgba(0, 0, 0, 0.8);
   text-decoration: none;
   border-bottom: none;
-  font-size: 0.999999rem;
+  font-size: 0.8rem;
   line-height: 1.8em;
 }
