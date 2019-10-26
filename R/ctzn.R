@@ -12,13 +12,9 @@
 #   Install Package:           'Cmd + Shift + B'
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
-
-
-#install.packages("highcharter")
-
 #' CPUB theme for highcharts
 #'
-#' Out theme, Based on Highcharter Google theme.
+#' Out theme, Based on Highcharter Google theme 1.
 #'
 #' @param ... Named argument to modify the theme
 #'

@@ -1,4 +1,3 @@
-
 #' Highcharts for SJPlot outputs from a regression
 #'
 #' @param model
@@ -18,7 +17,6 @@
 #' optional vectors of colors c("#9A32CD", "#FF3030", "#7FFFD4")
 #'
 #' @examples
-
 #'data(efc)
 #'efc$c161sex <- to_factor(efc$c161sex)
 #'fit <- lm(neg_c_7 ~ c12hour + barthtot * c161sex, data = efc)
@@ -27,16 +25,6 @@
 #'plot_highchart(fit,  terms = c("c161sex", "barthtot [30,50,70]"), color = c("red", "pink", "blue"))
 #'
 #' @export
-#'
-#'
-#'
-#'
-#'
-
-
-
-
-
 plot_highchart<-function(model, terms, type, colors ){
   library(manipulateWidget)
   library(sjPlot)

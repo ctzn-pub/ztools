@@ -10,7 +10,7 @@ hc_theme_ctzn(...)
 \item{...}{Named argument to modify the theme}
 }
 \description{
-Out theme, Based on Highcharter Google theme.
+Out theme, Based on Highcharter Google theme 1.
 }
 \examples{
 
