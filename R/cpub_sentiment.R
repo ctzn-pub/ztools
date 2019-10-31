@@ -1,0 +1,92 @@
+#' Augment a data frame to include text sentiments from bing, afinn, NRC
+#'
+#' @param df
+#'
+#' Data frame to work with
+#'
+#' @param text_column
+#'
+#' Column of text
+#'
+#' @examples
+#'library(dplyr)
+#'text <- c("Because I could not stop for Death -","He kindly stopped for me -","The Carriage held but just Ourselves -","and Immortality")
+#'text_df <- tibble(line = 1:4, text = text)
+#'cpub_sentiment(text_df, text)
+#'
+#' @export
+cpub_sentiment<- function(df, text_column){
+  ##See if the text has a link in it
+  df <- df %>%  mutate(contains_url = ifelse(grepl("http", !!sym(text_column)), 1, 0))
+  df$uuid<- rep(1:nrow(df))
+  library(tidyr)
+  ##Use tidytext to unnest tokens
+  library(tidytext)
+  text_df<- df %>%
+    unnest_tokens(word, !!sym(text_column))
+
+  ##Count words per entry per person ..
+  count<- text_df  %>%group_by(uuid) %>%  summarise(count = n())
+
+  ###Remove stop words before sentiment calculations
+  text_df <- text_df %>%
+    anti_join(stop_words)
+
+  ###Get 'sentiment' (bing)
+  bing <- text_df %>%
+    inner_join(get_sentiments("bing")) %>%
+    count(uuid, sentiment)%>%
+    spread(sentiment, n, fill = 0) %>%
+    mutate(bing_sentiment = positive - negative)
+
+  bing<-bing %>% mutate(bing_negative = negative,
+                        bing_positive = positive)
+  bing<-select(bing, -negative, - positive)
+
+  ## Get AFINN sentiment
+  afinn <- text_df %>%
+    inner_join(get_sentiments("afinn")) %>%
+    group_by(uuid) %>%
+    summarise(afinn_sentiment=  mean(value))
+
+
+
+  single_nrc<-get_sentiments("nrc")
+  single_nrc<-single_nrc %>% select(word)
+  single_nrc<- unique(single_nrc)
+  single_nrc$emotion<- 1
+  single<- text_df %>% select(uuid, word)
+  emotion_share <- single %>% left_join(single_nrc)
+
+emotion_share<-emotion_share %>% group_by(uuid) %>%mutate(nwords = n())
+emotion_share<-emotion_share %>% group_by(uuid) %>%mutate(emotion = sum(!is.na(emotion)))
+emotion_share<-emotion_share %>% group_by(uuid) %>%mutate(emotion_share = emotion/nwords)
+
+  nrc <- text_df %>%
+    inner_join(get_sentiments("nrc")) %>%
+    count(uuid,sentiment)%>%
+    spread(sentiment, n, fill = 0) %>%
+    group_by(uuid) %>%
+    mutate(emotion=sum(anger+anticipation+disgust+fear+joy+sadness+surprise+trust))%>%
+    mutate(Per_anger= anger/emotion)%>%
+    mutate(Per_anticipation= anticipation/emotion)%>%
+    mutate(Per_disgust=disgust/emotion)%>%
+    mutate(Per_fear=fear/emotion)%>%
+    mutate(Per_joy=joy/emotion)%>%
+    mutate(Per_sadness=sadness/emotion)%>%
+    mutate(Per_surprise=surprise/emotion)%>%
+    mutate(Per_trust=trust/emotion)
+
+  df<- left_join(df, afinn, by = "uuid")
+  df<- left_join(df, bing,  by = "uuid")
+  df<- left_join(df, nrc, by = "uuid")
+  df<- left_join(df, count, by = "uuid")
+  df<- left_join(df, emotion_share, by = "uuid")
+
+
+
+
+  df
+
+}
+
