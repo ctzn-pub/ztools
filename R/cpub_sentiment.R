@@ -71,7 +71,7 @@ emotion_share<-emotion_share %>% group_by(uuid) %>%mutate(emotion = sum(!is.na(e
 emotion_share<-emotion_share %>% group_by(uuid) %>%mutate(emotion_share_nrc = emotion/nwords)
 emotion_share<- emotion_share %>% select(-word)
 emotion_share<- unique(emotion_share)
-emotion_share<- select(uuid, emotion_share)
+emotion_share<- select(emotion_share,uuid, emotion_share_nrc)
   nrc <- text_df %>%
     inner_join(get_sentiments("nrc")) %>%
     count(uuid,sentiment)%>%
