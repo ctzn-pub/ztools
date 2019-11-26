@@ -205,7 +205,10 @@ plot_highchart<-function(model, terms, type, colors ){
   }
   else if (length(terms) == 3){
     triple<- plot_model(model, type = type, terms = terms)
+ if(length(levels(triple$data$facet)) == length(levels(model$model[[terms[3]]]))){  triple$data$facet <- factor(triple$data$facet,  levels = levels(model$model[[terms[3]]]))  }
+
     trbl<- triple$data
+
     labels<- get_x_labels(trbl)
 
     if (!is.null(labels)){

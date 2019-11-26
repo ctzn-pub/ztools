@@ -16,6 +16,8 @@
 #'
 #' @export
 cpub_sentiment<- function(df, text_column){
+  # install.packages("SentimentAnalysis")
+  library(SentimentAnalysis)
   ##See if the text has a link in it
   df <- df %>%  mutate(contains_url = ifelse(grepl("http", !!sym(text_column)), 1, 0))
   df$uuid<- rep(1:nrow(df))
@@ -36,12 +38,12 @@ cpub_sentiment<- function(df, text_column){
   bing <- text_df %>%
     inner_join(get_sentiments("bing")) %>%
     count(uuid, sentiment)%>%
-    spread(sentiment, n, fill = 0) %>%
-    mutate(bing_sentiment = positive - negative)
+    spread(sentiment, n, fill = 0)
+ #   mutate(bing_sentiment = positive - negative)
 
-  bing<-bing %>% mutate(bing_negative = negative,
-                        bing_positive = positive)
-  bing<-select(bing, -negative, - positive)
+#  bing<-bing %>% mutate(bing_negative = negative,
+ #                       bing_positive = positive)
+#  bing<-select(bing, -negative, - positive)
 
   ## Get AFINN sentiment
   afinn <- text_df %>%
@@ -84,10 +86,35 @@ emotion_share<- unique(emotion_share)
   df<- left_join(df, count, by = "uuid")
   df<- left_join(df, emotion_share, by = "uuid")
 
-
-
-
   df
 
 }
 
+# cpub_sentiment(egdf, text_column = 'documents')
+#
+#
+# documents <- c("This is a good thing!",
+#                "This is a very good thing!",
+#                "This is okay.",
+#                "This is a bad thing.",
+#                "This is a very bad thing.")
+#
+# nos<- c(1,22,3,4,5)
+#
+# egdf<-data.frame(nos, documents)
+# egdf$documents<-as.character(egdf$documents)
+# sentiment <- egdf %>% mutate(sentimentGI = analyzeSentiment(egdf$documents)$SentimentGI,
+#                              negativityGI = analyzeSentiment(egdf$documents)$NegaativityGI,
+#                              positivityGI = analyzeSentiment(egdf$documents)$PositivityGI,
+#                              sentimentQDAP = analyzeSentiment(egdf$documents)$SentimentQDAP,
+#                              negativityQDAP = analyzeSentiment(egdf$documents)$NegaativityQDAP,
+#                              positivityQDAP = analyzeSentiment(egdf$documents)$PositivityQDAP
+#
+#                              )
+
+#GI, HE, LM, QDAP
+
+#Harvard-IV dictionary (GI) http://www.wjh.harvard.edu/~inquirer/spreadsheet_guide.htm
+#Henry’s Financial dictionary (HE)
+#Loughran-McDonald Financial dictionary (LM)
+#QDAP dictionary from the package qdapDictionaries
