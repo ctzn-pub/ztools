@@ -68,10 +68,10 @@ cpub_sentiment<- function(df, text_column){
 
 emotion_share<-emotion_share %>% group_by(uuid) %>%mutate(nwords = n())
 emotion_share<-emotion_share %>% group_by(uuid) %>%mutate(emotion = sum(!is.na(emotion)))
-emotion_share<-emotion_share %>% group_by(uuid) %>%mutate(emotion_share = emotion/nwords)
+emotion_share<-emotion_share %>% group_by(uuid) %>%mutate(emotion_share_nrc = emotion/nwords)
 emotion_share<- emotion_share %>% select(-word)
 emotion_share<- unique(emotion_share)
-
+emotion_share<- select(uuid, emotion_share)
   nrc <- text_df %>%
     inner_join(get_sentiments("nrc")) %>%
     count(uuid,sentiment)%>%
@@ -91,8 +91,7 @@ emotion_share<- unique(emotion_share)
     mutate(Per_surprise=surprise/emotion)%>%
     mutate(Per_trust=trust/emotion)
 nrc<- select(nrc, -emotion, - c("anger","anticipation","disgust","fear","joy","sadness","surprise","trust"))
-
-
+names(nrc)[-1]<- paste0(names(nrc)[-1], "_nrc")
 df<- left_join(df, afinn, by = "uuid")
 #  df<- left_join(df, bing,  by = "uuid")
   df<- left_join(df, nrc, by = "uuid")
