@@ -127,7 +127,7 @@ plot_highchart<-function(model, terms, type, colors ){
       group_colors<-colors
     }
 
-    labels<- get_x_labels(dbl)
+    labels<- sort(get_x_labels(dbl))
 
     if (!is.null(labels)){
       df<- as.data.frame(labels)
@@ -212,7 +212,7 @@ plot_highchart<-function(model, terms, type, colors ){
 
     trbl<- triple$data
 
-    labels<- get_x_labels(trbl)
+    labels<- sort(get_x_labels(trbl))
 
     if (!is.null(labels)){
       df<- as.data.frame(labels)
