@@ -40,6 +40,9 @@ plot_highchart<-function(model, terms, type, colors ){
   library(RColorBrewer)
   if(missing(type)) {
     type = "eff"
+
+
+
   }
 
   qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
@@ -49,7 +52,45 @@ plot_highchart<-function(model, terms, type, colors ){
     paste(toupper(substring(s, 1,1)), substring(s, 2),
           sep="", collapse=" ")
   }
-  if (length(terms) == 1) {
+   if (missing(terms)){
+     emo<- plot_model(model)
+     edata<-emo$data
+     edata<-edata %>% arrange(estimate
+                              )
+
+
+     hchart(edata, "scatter", hcaes(x = term , y = estimate, group=group)) %>% hc_colors(c("#a53310", "#3768c6")) %>%
+       hc_add_series(edata, "errorbar", color=c("#a53310", "#3768c6"),
+                     hcaes(x = "term",  low = 'round(conf.low, 2)',group=group,
+                           high = 'round(conf.high, 2)'),
+                     enableMouseTracking = FALSE,
+                     showInLegend = FALSE)%>%
+       hc_exporting(enabled = FALSE)%>%
+       hc_add_theme(hc_theme_ctzn())%>%
+       hc_yAxis(plotLines = list(list(color = "#a4a4a4",width = 2, value = 1))) %>%
+
+       hc_title(text = emo$labels$title[[1]],
+                style = list(fontSize = "14px"),
+                align = "left")%>%
+       hc_subtitle(text = emo$labels$subtitle,
+                   style = list(fontSize = "10px"),
+                   align = "left")%>%
+       hc_legend(enabled = FALSE) %>%
+       hc_xAxis(title=list(text="")) %>%
+       hc_yAxis(title = list(text = "Odds Ratios"),
+                labels = list(format = "{value}"))%>%
+       hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
+                  backgroundColor = "#f0f0f0",
+                  valueDecimals=0,
+                  shared = TRUE,
+                  borderWidth = 0,
+                  headerFormat = paste0("Predicted <b>", 'Value' , '</b> <br> <span style="color: #2b908f;font-weight:bold">{point.key}</span>') ,
+                  pointFormat = ": {point.y:.2f}") %>% hc_chart(inverted=TRUE)
+
+
+     }
+
+ else if (length(terms) == 1) {
     if(missing(colors)) {
       colors = colorspace::lighten("#030303", 0.7)
     }
