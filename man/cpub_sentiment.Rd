@@ -2,7 +2,7 @@
 % Please edit documentation in R/cpub_sentiment.R
 \name{cpub_sentiment}
 \alias{cpub_sentiment}
-\title{Augment a data frame to include text sentiments from bing, afinn, NRC}
+\title{Augment a data frame to include text sentiments from  afinn, NRC}
 \usage{
 cpub_sentiment(df, text_column)
 }
@@ -12,7 +12,9 @@ cpub_sentiment(df, text_column)
 \item{text_column}{Column of text}
 }
 \description{
-Augment a data frame to include text sentiments from bing, afinn, NRC
+GI, QDAP
+Harvard-IV dictionary (GI) http://www.wjh.harvard.edu/~inquirer/spreadsheet_guide.htm
+QDAP dictionary from the package qdapDictionaries
 }
 \examples{
 library(dplyr)

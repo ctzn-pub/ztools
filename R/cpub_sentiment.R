@@ -103,5 +103,4 @@ df<- left_join(df, afinn, by = "uuid")
 df
 }
 
-cpub_sentiment(egdf, text_column = 'documents')
 
