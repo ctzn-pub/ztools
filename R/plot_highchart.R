@@ -117,6 +117,8 @@ plot_highchart<-function(model, terms, type, colors ){
     singleplot
   } else if (length(terms) == 2){
     double<- plot_model(model, type = type, terms =terms)
+    if(length(levels(double$data$group)) == length(levels(model$model[[terms[2]]]))){  double$data$group <- factor(double$data$group,  levels = levels(model$model[[terms[2]]]))  }
+
     dbl<- double$data
 
     if(missing(colors)) {
@@ -206,6 +208,7 @@ plot_highchart<-function(model, terms, type, colors ){
   else if (length(terms) == 3){
     triple<- plot_model(model, type = type, terms = terms)
  if(length(levels(triple$data$facet)) == length(levels(model$model[[terms[3]]]))){  triple$data$facet <- factor(triple$data$facet,  levels = levels(model$model[[terms[3]]]))  }
+    if(length(levels(triple$data$group)) == length(levels(model$model[[terms[2]]]))){  triple$data$group <- factor(triple$data$group,  levels = levels(model$model[[terms[2]]]))  }
 
     trbl<- triple$data
 
