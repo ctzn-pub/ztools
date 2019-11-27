@@ -159,7 +159,10 @@ plot_highchart<-function(model, terms, type, colors ){
   } else if (length(terms) == 2){
     double<- plot_model(model, type = type, terms =terms)
     if(length(levels(double$data$group)) == length(levels(model$model[[terms[2]]]))){  double$data$group <- factor(double$data$group,  levels = levels(model$model[[terms[2]]]))  }
-
+    l3<- levels(triple$data$group)
+    l4<- levels(model$model[[stringr::word(terms[2])]])
+    l4<-subset(l4, l4 %in% l3)
+    triple$data$group <- factor(triple$data$group,  levels = l4)
     dbl<- double$data
 
     if(missing(colors)) {
@@ -251,6 +254,16 @@ plot_highchart<-function(model, terms, type, colors ){
  if(length(levels(triple$data$facet)) == length(levels(model$model[[terms[3]]]))){  triple$data$facet <- factor(triple$data$facet,  levels = levels(model$model[[terms[3]]]))  }
     if(length(levels(triple$data$group)) == length(levels(model$model[[terms[2]]]))){  triple$data$group <- factor(triple$data$group,  levels = levels(model$model[[terms[2]]]))  }
 
+    l1<- levels(triple$data$facet)
+    l2<- levels(model$model[[stringr::word(terms[3])]])
+    l2<-subset(l2, l2%in% l1)
+    triple$data$facet <- factor(triple$data$facet,  levels = l2)
+
+    l3<- levels(triple$data$group)
+    l4<- levels(model$model[[stringr::word(terms[2])]])
+    l4<-subset(l4, l4 %in% l3)
+    triple$data$group <- factor(triple$data$group,  levels = l4)
+
     trbl<- triple$data
 
     labels<- sort(get_x_labels(trbl))
@@ -290,7 +303,7 @@ plot_highchart<-function(model, terms, type, colors ){
           hc_chart(marginTop= 80) %>%
           hc_title(text = unique(data$facet),     y= 60,
                    style = list(fontSize = "14px"),
-                   align = "left") %>%
+                   align = "center") %>%
           hc_legend(enabled =ifelse(end == 'tail', TRUE, FALSE),
                     align= 'right',
                     floating = TRUE,
@@ -355,7 +368,7 @@ plot_highchart<-function(model, terms, type, colors ){
           hc_chart(marginTop= 80) %>%
           hc_title(text = unique(data$facet),     y= 60,
                    style = list(fontSize = "14px"),
-                   align = "left") %>%
+                   align = "center") %>%
           hc_legend(enabled =ifelse(end == 'tail', TRUE, FALSE),
                     align= 'right',
                     floating = TRUE,
