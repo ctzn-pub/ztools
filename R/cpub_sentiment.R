@@ -20,6 +20,7 @@
 #' @export
 cpub_sentiment<- function(df, text_column){
   # install.packages("SentimentAnalysis")
+  library(dplyr)
   library(SentimentAnalysis)
   ##See if the text has a link in it
   df <- df %>%  mutate(contains_url = ifelse(grepl("http", !!sym(text_column)), 1, 0))
