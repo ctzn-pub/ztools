@@ -13,7 +13,7 @@
 #'
 #' @examples
 #'library(dplyr)
-#'text <- c("Because I could not stop for Death -","He kindly stopped for me -","The Carriage held but just Ourselves -","and Immortality")
+#'text <- c("I hate everything smells foul and ugly and mean and evil","Kind love peace harmony","The Carriage held but just Ourselves -","and Immortality")
 #'text_df <- tibble(line = 1:4, text = text)
 #'cpub_sentiment(text_df, text)
 #'
@@ -24,11 +24,12 @@ cpub_sentiment<- function(df, text_column){
   ##See if the text has a link in it
   df <- df %>%  mutate(contains_url = ifelse(grepl("http", !!sym(text_column)), 1, 0))
   df$uuid<- rep(1:nrow(df))
-  df<-df%>% mutate(sentimentGI = analyzeSentiment(df[text_column])$SentimentGI,
-                   negativityGI = analyzeSentiment(df[text_column])$NegaativityGI,
-                   positivityGI = analyzeSentiment(df[text_column])$PositivityGI,
-                   sentimentQDAP = analyzeSentiment(df[text_column])$SentimentQDAP,                              negativityQDAP = analyzeSentiment(egdf$documents)$NegaativityQDAP,
-                   positivityQDAP = analyzeSentiment(df[text_column])$PositivityQDAP)
+  df<-df%>% dplyr::mutate(sentimentGI = analyzeSentiment(df[[text_column]])$SentimentGI,
+                   negativityGI = analyzeSentiment(df[[text_column]])$NegaativityGI,
+                   positivityGI = analyzeSentiment(df[[text_column]])$PositivityGI,
+                   sentimentQDAP = analyzeSentiment(df[[text_column]])$SentimentQDAP,
+                   negativityQDAP = analyzeSentiment(df[[text_column]])$NegaativityQDAP,
+                   positivityQDAP = analyzeSentiment(df[[text_column]])$PositivityQDAP)
 
   library(tidyr)
   ##Use tidytext to unnest tokens

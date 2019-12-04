@@ -287,8 +287,8 @@ plot_highchart<-function(model, terms, type, colors ){
 
 
       plots3<- lapply(split(trbl, trbl$facet), function(data){
-        #end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[length(unique(trbl$facet))]]$facet, 'tail', 'nottail')
-        end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 'tail', 'nottail')
+        end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[length(unique(trbl$facet))]]$facet, 'tail', 'nottail')
+       # end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 'tail', 'nottail')
 
         end<-unique(end)
         order<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 1,
@@ -303,7 +303,8 @@ plot_highchart<-function(model, terms, type, colors ){
           hc_exporting(enabled = FALSE)%>%
           hc_add_theme(hc_theme_ctzn())%>%
           hc_chart(marginTop= 40, marginBottom=120) %>%
-          hc_title(text = unique(data$facet),     y= 60,
+          hc_title(text = unique(data$facet),
+                   #y= 60,
                    style = list(fontSize = "14px"),
                    align = "center") %>%
           hc_legend(enabled =ifelse(end == 'tail', TRUE, FALSE),
