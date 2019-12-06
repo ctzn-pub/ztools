@@ -25,7 +25,7 @@
 #'plot_highchart(fit,  terms = c("c161sex", "barthtot [30,50,70]"), color = c("red", "pink", "blue"))
 #'
 #' @export
-plot_highchart<-function(model, terms, type, colors ){
+plot_highchart<-function(model, terms, type, colors, size){
   library(manipulateWidget)
   library(sjPlot)
   library(sjmisc)
@@ -47,6 +47,14 @@ plot_highchart<-function(model, terms, type, colors ){
 
   qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
   col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
+
+
+  if(missing(size)) {
+size <- 400
+} else{
+    size<-size
+  }
+
   simpleCap <- function(x) {
     s <- strsplit(x, " ")[[1]]
     paste(toupper(substring(s, 1,1)), substring(s, 2),
@@ -114,6 +122,8 @@ plot_highchart<-function(model, terms, type, colors ){
                     align = "left")%>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(title=list(text=simpleCap(single$labels$x))) %>%
+        hc_size(height = size ) %>%
+
         hc_yAxis(title = list(text = paste0(single$labels$y)),
                  labels = list(format = "{value}"))%>%
         hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
@@ -145,6 +155,8 @@ plot_highchart<-function(model, terms, type, colors ){
                     align = "left")%>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(title=list(text=simpleCap(single$labels$x))) %>%
+        hc_size(height = size ) %>%
+
         hc_yAxis(title = list(text = paste0(single$labels$y)),
                  labels = list(format = "{value}"))%>%
         hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
@@ -201,6 +213,8 @@ plot_highchart<-function(model, terms, type, colors ){
         hc_xAxis(title=list(text=simpleCap(double$labels$x))) %>%
         hc_yAxis(title = list(text = paste0(double$labels$y)),
                  labels = list(format = "{value}"))%>%
+        hc_size(height = size ) %>%
+
         hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
                    backgroundColor = "#f0f0f0",
                    valueDecimals=0,
@@ -234,6 +248,8 @@ plot_highchart<-function(model, terms, type, colors ){
                   layout='horizontal',
                   title = list(text =simpleCap(double$labels$shape))) %>%
         hc_xAxis(title=list(text=simpleCap(double$labels$x))) %>%
+        hc_size(height = size ) %>%
+
         hc_yAxis(title = list(text = paste0(double$labels$y)),
                  labels = list(format = "{value}"))%>%
         hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
@@ -287,8 +303,8 @@ plot_highchart<-function(model, terms, type, colors ){
 
 
       plots3<- lapply(split(trbl, trbl$facet), function(data){
-        end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[length(unique(trbl$facet))]]$facet, 'tail', 'nottail')
-       # end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 'tail', 'nottail')
+        #\end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[length(unique(trbl$facet))]]$facet, 'tail', 'nottail')
+        end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 'tail', 'nottail')
 
         end<-unique(end)
         order<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 1,
@@ -322,6 +338,8 @@ plot_highchart<-function(model, terms, type, colors ){
                               x=-2),
                    labels = list(enabled = ifelse(order == 1, TRUE, FALSE)),
                    max = max(trbl$conf.high), min=min(trbl$conf.low), labels = list(format = "{value}"))%>%
+          hc_size(height = size ) %>%
+
           hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
                      backgroundColor = "#f0f0f0",
                      valueDecimals=0,
@@ -369,7 +387,8 @@ plot_highchart<-function(model, terms, type, colors ){
           hc_exporting(enabled = FALSE)%>%
           hc_add_theme(hc_theme_ctzn())%>%
           hc_chart(marginTop= 80) %>%
-          hc_title(text = unique(data$facet),     y= 60,
+          hc_title(text = unique(data$facet),
+                   #y= 60,
                    style = list(fontSize = "14px"),
                    align = "center") %>%
           hc_legend(enabled =ifelse(end == 'tail', TRUE, FALSE),
@@ -382,6 +401,7 @@ plot_highchart<-function(model, terms, type, colors ){
           hc_xAxis(title=list(text =ifelse(order == 2 , simpleCap(triple$labels$x), ""),
                               reserveSpace = FALSE,
                               y=0)) %>%
+          hc_size(height = size )
           hc_yAxis(title=list(text =ifelse(order == 1 , simpleCap(triple$labels$y), ""),
                               reserveSpace = FALSE,
                               x=-2),
