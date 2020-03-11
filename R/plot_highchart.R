@@ -174,7 +174,7 @@ size <- 400
     l3<- levels(double$data$group)
     l4<- levels(model$model[[stringr::word(terms[2])]])
     l4<-subset(l4, l4 %in% l3)
-    triple$data$group <- factor(triple$data$group,  levels = l4)
+    double$data$group <- factor(double$data$group,  levels = l4)
     dbl<- double$data
 
     if(missing(colors)) {
