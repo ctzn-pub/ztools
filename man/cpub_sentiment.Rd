@@ -18,7 +18,7 @@ QDAP dictionary from the package qdapDictionaries
 }
 \examples{
 library(dplyr)
-text <- c("Because I could not stop for Death -","He kindly stopped for me -","The Carriage held but just Ourselves -","and Immortality")
+text <- c("I hate everything smells foul and ugly and mean and evil","Kind love peace harmony","The Carriage held but just Ourselves -","and Immortality")
 text_df <- tibble(line = 1:4, text = text)
 cpub_sentiment(text_df, text)
 

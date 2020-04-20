@@ -4,7 +4,7 @@
 \alias{plot_highchart}
 \title{Highcharts for SJPlot outputs from a regression}
 \usage{
-plot_highchart(model, terms, type, colors)
+plot_highchart(model, terms, type, colors, size)
 }
 \arguments{
 \item{model}{An model object}
