@@ -8,6 +8,9 @@
 #'
 #'Desired terms
 #'
+#' @param size
+#' height in px!
+#'
 #' @param type
 #'
 #' Optional, defaults to 'eff' but can also be 'pred' if specified.
@@ -50,8 +53,8 @@ plot_highchart<-function(model, terms, type, colors, size){
 
 
   if(missing(size)) {
-size <- 400
-} else{
+    size <- 400
+  } else{
     size<-size
   }
 
@@ -60,45 +63,45 @@ size <- 400
     paste(toupper(substring(s, 1,1)), substring(s, 2),
           sep="", collapse=" ")
   }
-   if (missing(terms)){
-     emo<- plot_model(model)
-     edata<-emo$data
-     edata<-edata %>% arrange(estimate
-                              )
+  if (missing(terms)){
+    emo<- plot_model(model)
+    edata<-emo$data
+    edata<-edata %>% arrange(estimate
+    )
 
 
-     hchart(edata, "scatter", hcaes(x = term , y = estimate, group=group)) %>% hc_colors(c("#a53310", "#3768c6")) %>%
-       hc_add_series(edata, "errorbar", color=c("#a53310", "#3768c6"),
-                     hcaes(x = "term",  low = 'round(conf.low, 2)',group=group,
-                           high = 'round(conf.high, 2)'),
-                     enableMouseTracking = FALSE,
-                     showInLegend = FALSE)%>%
-       hc_exporting(enabled = FALSE)%>%
-       hc_add_theme(hc_theme_ctzn())%>%
-       hc_yAxis(plotLines = list(list(color = "#a4a4a4",width = 2, value = 1))) %>%
+    hchart(edata, "scatter", hcaes(x = term , y = estimate, group=group)) %>% hc_colors(c("#a53310", "#3768c6")) %>%
+      hc_add_series(edata, "errorbar", color=c("#a53310", "#3768c6"),
+                    hcaes(x = "term",  low = 'round(conf.low, 2)',group=group,
+                          high = 'round(conf.high, 2)'),
+                    enableMouseTracking = FALSE,
+                    showInLegend = FALSE)%>%
+      hc_exporting(enabled = FALSE)%>%
+      hc_add_theme(hc_theme_ctzn())%>%
+      hc_yAxis(plotLines = list(list(color = "#a4a4a4",width = 2, value = 1))) %>%
 
-       hc_title(text = emo$labels$title[[1]],
-                style = list(fontSize = "14px"),
-                align = "left")%>%
-       hc_subtitle(text = emo$labels$subtitle,
-                   style = list(fontSize = "10px"),
-                   align = "left")%>%
-       hc_legend(enabled = FALSE) %>%
-       hc_xAxis(title=list(text="")) %>%
-       hc_yAxis(title = list(text = "Odds Ratios"),
-                labels = list(format = "{value}"))%>%
-       hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
-                  backgroundColor = "#f0f0f0",
-                  valueDecimals=0,
-                  shared = TRUE,
-                  borderWidth = 0,
-                  headerFormat = paste0("Predicted <b>", 'Value' , '</b> <br> <span style="color: #2b908f;font-weight:bold">{point.key}</span>') ,
-                  pointFormat = ": {point.y:.2f}") %>% hc_chart(inverted=TRUE)
+      hc_title(text = emo$labels$title[[1]],
+               style = list(fontSize = "14px"),
+               align = "left")%>%
+      hc_subtitle(text = emo$labels$subtitle,
+                  style = list(fontSize = "10px"),
+                  align = "left")%>%
+      hc_legend(enabled = FALSE) %>%
+      hc_xAxis(title=list(text="")) %>%
+      hc_yAxis(title = list(text = "Odds Ratios"),
+               labels = list(format = "{value}"))%>%
+      hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
+                 backgroundColor = "#f0f0f0",
+                 valueDecimals=0,
+                 shared = TRUE,
+                 borderWidth = 0,
+                 headerFormat = paste0("Predicted <b>", 'Value' , '</b> <br> <span style="color: #2b908f;font-weight:bold">{point.key}</span>') ,
+                 pointFormat = ": {point.y:.2f}") %>% hc_chart(inverted=TRUE)
 
 
-     }
+  }
 
- else if (length(terms) == 1) {
+  else if (length(terms) == 1) {
     if(missing(colors)) {
       colors = colorspace::lighten("#030303", 0.7)
     }
@@ -122,7 +125,7 @@ size <- 400
                     align = "left")%>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(title=list(text=simpleCap(single$labels$x))) %>%
-        hc_size(height = size ) %>%
+        hc_size(height = size,width=289 ) %>%
 
         hc_yAxis(title = list(text = paste0(single$labels$y)),
                  labels = list(format = "{value}"))%>%
@@ -155,7 +158,7 @@ size <- 400
                     align = "left")%>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(title=list(text=simpleCap(single$labels$x))) %>%
-        hc_size(height = size ) %>%
+        hc_size(height = size ,width=289) %>%
 
         hc_yAxis(title = list(text = paste0(single$labels$y)),
                  labels = list(format = "{value}"))%>%
@@ -190,7 +193,7 @@ size <- 400
       names(df)<- 'labels'
       df$x <- as.numeric(rownames(df))
       dbl<- left_join(dbl, df, by = "x")
-    #  dbl<-dbl %>% mutate( labels = ifelse(x == 1, labels[1],labels[2]))
+      #  dbl<-dbl %>% mutate( labels = ifelse(x == 1, labels[1],labels[2]))
       doublecont<-hchart(dbl, "line", color =group_colors, hcaes(x = labels , y = predicted,  group = group))%>%
         hc_add_series(dbl, "errorbar", color =group_colors,
                       hcaes(x = "labels", group = group, low = 'round(conf.low, 2)',
@@ -213,7 +216,7 @@ size <- 400
         hc_xAxis(title=list(text=simpleCap(double$labels$x))) %>%
         hc_yAxis(title = list(text = paste0(double$labels$y)),
                  labels = list(format = "{value}"))%>%
-        hc_size(height = size ) %>%
+        hc_size(height = size,width=289 ) %>%
 
         hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
                    backgroundColor = "#f0f0f0",
@@ -248,7 +251,7 @@ size <- 400
                   layout='horizontal',
                   title = list(text =simpleCap(double$labels$shape))) %>%
         hc_xAxis(title=list(text=simpleCap(double$labels$x))) %>%
-        hc_size(height = size ) %>%
+        hc_size(height = size,width=289 ) %>%
 
         hc_yAxis(title = list(text = paste0(double$labels$y)),
                  labels = list(format = "{value}"))%>%
@@ -267,7 +270,7 @@ size <- 400
   }
   else if (length(terms) == 3){
     triple<- plot_model(model, type = type, terms = terms)
- if(length(levels(triple$data$facet)) == length(levels(model$model[[terms[3]]]))){  triple$data$facet <- factor(triple$data$facet,  levels = levels(model$model[[terms[3]]]))  }
+    if(length(levels(triple$data$facet)) == length(levels(model$model[[terms[3]]]))){  triple$data$facet <- factor(triple$data$facet,  levels = levels(model$model[[terms[3]]]))  }
     if(length(levels(triple$data$group)) == length(levels(model$model[[terms[2]]]))){  triple$data$group <- factor(triple$data$group,  levels = levels(model$model[[terms[2]]]))  }
 
     l1<- levels(triple$data$facet)
@@ -291,7 +294,7 @@ size <- 400
       trbl<- left_join(trbl, df, by = "x")
 
 
-     # trbl<-trbl %>% mutate( labels = ifelse(x == 1, labels[1],labels[2]))
+      # trbl<-trbl %>% mutate( labels = ifelse(x == 1, labels[1],labels[2]))
       #group_colors<-sample(col_vector,  length(unique(trbl$group)))
 
 
@@ -338,7 +341,7 @@ size <- 400
                               x=-2),
                    labels = list(enabled = ifelse(order == 1, TRUE, FALSE)),
                    max = max(trbl$conf.high), min=min(trbl$conf.low), labels = list(format = "{value}"))%>%
-          hc_size(height = size ) %>%
+          hc_size(height = size,width=289  ) %>%
 
           hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
                      backgroundColor = "#f0f0f0",
@@ -361,7 +364,7 @@ size <- 400
                    }))))
     } else{
       trbl<-trbl %>% mutate( labels =x)
-   #   group_colors<-sample(col_vector,  length(unique(trbl$group)))
+      #   group_colors<-sample(col_vector,  length(unique(trbl$group)))
 
       if(missing(colors)) {
         group_colors<-sample(col_vector,  length(unique(trbl$group)))
@@ -401,12 +404,12 @@ size <- 400
           hc_xAxis(title=list(text =ifelse(order == 2 , simpleCap(triple$labels$x), ""),
                               reserveSpace = FALSE,
                               y=0)) %>%
-          hc_size(height = size )
-          hc_yAxis(title=list(text =ifelse(order == 1 , simpleCap(triple$labels$y), ""),
-                              reserveSpace = FALSE,
-                              x=-2),
-                   labels = list(enabled = ifelse(order == 1, TRUE, FALSE)),
-                   max = max(trbl$conf.high), min=min(trbl$conf.low), labels = list(format = "{value}"))%>%
+          hc_size(height = size, width=289 )
+        hc_yAxis(title=list(text =ifelse(order == 1 , simpleCap(triple$labels$y), ""),
+                            reserveSpace = FALSE,
+                            x=-2),
+                 labels = list(enabled = ifelse(order == 1, TRUE, FALSE)),
+                 max = max(trbl$conf.high), min=min(trbl$conf.low), labels = list(format = "{value}"))%>%
           hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
                      backgroundColor = "#f0f0f0",
                      valueDecimals=0,
