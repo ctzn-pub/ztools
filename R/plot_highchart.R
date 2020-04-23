@@ -28,7 +28,7 @@
 #'plot_highchart(fit,  terms = c("c161sex", "barthtot [30,50,70]"), color = c("red", "pink", "blue"))
 #'
 #' @export
-plot_highchart<-function(model, terms, type, colors, size){
+plot_highchart<-function(model, title, terms, type, colors, size){
   library(manipulateWidget)
   library(sjPlot)
   library(sjmisc)
@@ -51,7 +51,9 @@ plot_highchart<-function(model, terms, type, colors, size){
   qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
   col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
 
-
+if(missing(title)){
+  threetitle<- triple$labels$title
+}
   if(missing(size)) {
     size <- 400
   } else{
@@ -288,11 +290,12 @@ plot_highchart<-function(model, terms, type, colors, size){
     labels<- sort(get_x_labels(trbl))
 
     if (!is.null(labels)){
-      df<- as.data.frame(labels)
-      names(df)<- 'labels'
-      df$x <- as.numeric(rownames(df))
-      trbl<- left_join(trbl, df, by = "x")
+   #   df<- as.data.frame(labels)
+    #  names(df)<- 'labels'
+     # df$x <- as.numeric(rownames(df))
+      #trbl<- left_join(trbl, df, by = "x")
 
+      trbl<-trbl %>% mutate( labels =x)
 
       # trbl<-trbl %>% mutate( labels = ifelse(x == 1, labels[1],labels[2]))
       #group_colors<-sample(col_vector,  length(unique(trbl$group)))
@@ -321,7 +324,7 @@ plot_highchart<-function(model, terms, type, colors, size){
                         showInLegend = FALSE)%>%
           hc_exporting(enabled = FALSE)%>%
           hc_add_theme(hc_theme_ctzn())%>%
-          hc_chart(marginTop= 40, marginBottom=120) %>%
+          hc_chart(marginTop= 90, marginBottom=120) %>%
           hc_title(text = unique(data$facet),
                    #y= 60,
                    style = list(fontSize = "14px"),
@@ -330,7 +333,7 @@ plot_highchart<-function(model, terms, type, colors, size){
                     align= 'left',
                     floating = TRUE,
                     x=0,y=15, padding =10,margin=0,
-                    verticalAlign='bottom',
+                    verticalAlign='top',
                     layout='horizontal',
                     title = list(text =simpleCap(triple$labels$shape))) %>%
           hc_xAxis(title=list(text =ifelse(order == 2 , simpleCap(triple$labels$x), ""),
@@ -389,7 +392,7 @@ plot_highchart<-function(model, terms, type, colors, size){
                         showInLegend = FALSE)%>%
           hc_exporting(enabled = FALSE)%>%
           hc_add_theme(hc_theme_ctzn())%>%
-          hc_chart(marginTop= 80) %>%
+          hc_chart(marginTop= 90) %>%
           hc_title(text = unique(data$facet),
                    #y= 60,
                    style = list(fontSize = "14px"),
@@ -404,7 +407,7 @@ plot_highchart<-function(model, terms, type, colors, size){
           hc_xAxis(title=list(text =ifelse(order == 2 , simpleCap(triple$labels$x), ""),
                               reserveSpace = FALSE,
                               y=0)) %>%
-          hc_size(height = size, width=289 )
+          hc_size(height = size, width=289 ) %>%
         hc_yAxis(title=list(text =ifelse(order == 1 , simpleCap(triple$labels$y), ""),
                             reserveSpace = FALSE,
                             x=-2),
@@ -420,7 +423,7 @@ plot_highchart<-function(model, terms, type, colors, size){
       })
 
       browsable(
-        tags$h3( triple$labels$title, style =  "margin-left: 20px; text-align: left; font-family: Georgia;font-size:16px;padding: 0",
+        tags$h3( threetitle, style =  "margin-left: 20px; text-align: left; font-family: Georgia;font-size:16px;padding: 0",
 
                  tags$div(
                    lapply(1:length(unique(trbl$facet)), function(i) {
