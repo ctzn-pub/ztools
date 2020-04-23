@@ -324,6 +324,36 @@ plot_highchart<-function(model, title, terms, type, colors, size){
       } else{
         group_colors<-colors
       }
+      plots0<- lapply(split(trbl, trbl$facet)[1], function(data){
+        plotgroups<- split(data, data$group)
+        end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 'tail', 'nottail')
+        end<-unique(end)
+        order<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 1,
+                      ifelse(unique(data$facet) == split(trbl, trbl$facet)[[2]]$facet, 2, 0  )        )
+        order<-unique(order)
+        hchart(data, "line",
+               name =names(plotgroups), id=names(plotgroups),zIndex=4,
+               marker = list(symbol ='circle', radius = 3,fillColor= '#FFFFFF', lineWidth = 2, lineColor = NULL),
+               color =  group_colors, hcaes(x = labels , y = predicted,  group = group))%>%
+          hc_add_series(data, "errorbar", color =  group_colors,linkedTo=names(plotgroups),
+                        hcaes(x = "labels", group = group, low = conf.low, 2,
+                              high = conf.high),
+                        enableMouseTracking = FALSE,
+                        showInLegend = FALSE)%>%
+          hc_exporting(enabled = FALSE)%>%
+          hc_yAxis(title=list(text='')) %>%
+          hc_add_theme(hc_theme_ctzn())%>%
+          hc_chart(marginTop= 90, marginBottom=120) %>%
+          hc_title(text = "") %>%
+          hc_legend(enabled =TRUE,
+                    align= 'left',
+                    floating = FALSE,
+                    x=0,y=0, padding =0,margin=0,
+                    verticalAlign='top',
+                    layout='horizontal',
+                    title = list(text =simpleCap(triple$labels$shape))) %>%  hc_size(width=300, height=84) %>%
+          hc_plotOptions(series = list(events = list(legendItemClick =  sharelegend)))
+      })
 
 
       plots3<- lapply(split(trbl, trbl$facet), function(data){
@@ -348,12 +378,13 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                         showInLegend = FALSE)%>%
           hc_exporting(enabled = FALSE)%>%
           hc_add_theme(hc_theme_ctzn())%>%
-          hc_chart(marginTop= 90, marginBottom=120) %>%
+          hc_chart(marginTop= 80, marginBottom=120) %>%
           hc_title(text = unique(data$facet),
                    #y= 60,
                    style = list(fontSize = "14px"),
                    align = "center") %>%
-          hc_legend(enabled =ifelse(end == 'tail', TRUE, FALSE),
+          hc_legend(enabled =FALSE,
+                    # ifelse(end == 'tail', TRUE, FALSE),
                     align= 'left',
                     floating = TRUE,
                     x=0,y=15, padding =10,margin=0,
@@ -369,7 +400,6 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                    labels = list(enabled = ifelse(order == 1, TRUE, FALSE)),
                    max = max(trbl$conf.high), min=min(trbl$conf.low), labels = list(format = "{value}"))%>%
           hc_size(height = size,width=249  ) %>%
-
           hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
                      backgroundColor = "#f0f0f0",
                      valueDecimals=0,
@@ -387,11 +417,19 @@ plot_highchart<-function(model, title, terms, type, colors, size){
         threetitle<-title
       }
       browsable(
-        tags$h3( threetitle, style =  "margin-left: 20px; text-align: left; font-family: Georgia;font-size:16px;padding: 0",
-                 tags$div(class= "hc-link-legend", style="display: flex;align-items: center;justify-content: center;",
-                          lapply(1:length(unique(trbl$facet)), function(i) {
-                            tags$div(style = paste0('width:250px;display:block;float:left;'), plots3[i])
-                          }))))
+
+        tags$div(class= "hc-link-legend",
+                 tags$div(
+                   tags$h3( threetitle, style =  "font-size: 27px !important;margin-left: 10px;margin-right: 20px; margin-top:0; text-align: left; font-family: Georgia;font-size:16px;padding: 0"),
+                   style="padding-left: 61px;display: flex;align-items: center;justify-content: left; ",tags$div(plots0, style="width:300px;")),
+
+                 tags$div(
+                   style="display: flex;align-items: center;justify-content: center;",
+                   lapply(1:length(unique(trbl$facet)), function(i) {
+                     tags$div(style = paste0('width:250px;display:block;float:left;'), plots3[i])
+                   })
+                 )
+        ))
     } else{
       trbl<-trbl %>% mutate( labels =x)
       #   group_colors<-sample(col_vector,  length(unique(trbl$group)))
@@ -469,4 +507,5 @@ plot_highchart<-function(model, title, terms, type, colors, size){
     }
   }
 }
+
 
