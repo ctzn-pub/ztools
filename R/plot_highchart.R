@@ -342,7 +342,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                               x=-2),
                    labels = list(enabled = ifelse(order == 1, TRUE, FALSE)),
                    max = max(trbl$conf.high), min=min(trbl$conf.low), labels = list(format = "{value}"))%>%
-          hc_size(height = size,width=289  ) %>%
+          hc_size(height = size,width=249  ) %>%
 
           hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
                      backgroundColor = "#f0f0f0",
