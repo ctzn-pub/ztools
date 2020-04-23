@@ -58,6 +58,26 @@ plot_highchart<-function(model, title, terms, type, colors, size){
     size<-size
   }
 
+
+
+  sharelegend = JS('function(event){
+    var vis = this.visible;
+    var conall = $(this.chart.container).parents(".hc-link-legend").find("div.highchart");
+    for(var i = 0; i < conall.length; i++){
+      var hc = $(conall[i]).highcharts();
+      var series = hc.get(this.options.id);
+      if(series){
+        if(vis){
+          series.hide();
+        } else{
+          series.show();
+        }
+      }
+    }
+    return false;
+  }')
+
+
   simpleCap <- function(x) {
     s <- strsplit(x, " ")[[1]]
     paste(toupper(substring(s, 1,1)), substring(s, 2),
@@ -288,9 +308,9 @@ plot_highchart<-function(model, title, terms, type, colors, size){
     labels<- sort(get_x_labels(trbl))
 
     if (!is.null(labels)){
-   #   df<- as.data.frame(labels)
-    #  names(df)<- 'labels'
-     # df$x <- as.numeric(rownames(df))
+      #   df<- as.data.frame(labels)
+      #  names(df)<- 'labels'
+      # df$x <- as.numeric(rownames(df))
       #trbl<- left_join(trbl, df, by = "x")
 
       trbl<-trbl %>% mutate( labels =x)
@@ -307,6 +327,9 @@ plot_highchart<-function(model, title, terms, type, colors, size){
 
 
       plots3<- lapply(split(trbl, trbl$facet), function(data){
+
+        plotgroups<- split(data, data$group)
+
         #\end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[length(unique(trbl$facet))]]$facet, 'tail', 'nottail')
         end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 'tail', 'nottail')
 
@@ -314,8 +337,11 @@ plot_highchart<-function(model, title, terms, type, colors, size){
         order<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 1,
                       ifelse(unique(data$facet) == split(trbl, trbl$facet)[[2]]$facet, 2, 0  )        )
         order<-unique(order)
-        hchart(data, "line", color =  group_colors, hcaes(x = labels , y = predicted,  group = group))%>%
-          hc_add_series(data, "errorbar", color =  group_colors,
+        hchart(data, "line",
+               name =names(plotgroups), id=names(plotgroups),zIndex=4,
+               marker = list(symbol ='circle', radius = 3,fillColor= '#FFFFFF', lineWidth = 2, lineColor = NULL),
+               color =  group_colors, hcaes(x = labels , y = predicted,  group = group))%>%
+          hc_add_series(data, "errorbar", color =  group_colors,linkedTo=names(plotgroups),
                         hcaes(x = "labels", group = group, low = conf.low, 2,
                               high = conf.high),
                         enableMouseTracking = FALSE,
@@ -350,23 +376,22 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                      shared = TRUE,
                      borderWidth = 0,
                      borderWidth = 0,pointFormat='<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f}</b><br/>',
-                     headerFormat = paste0( simpleCap(triple$labels$x),': <span style="color: #2b908f;font-weight:bold">{point.key}</span><br>',paste0( simpleCap(triple$labels$y), ": <br>")))%>%
-          hc_add_series(data,"scatter",   color =  group_colors,
-                        showInLegend = FALSE,
-                        hcaes(x = "labels", y = "predicted", group = group),
-                        marker = list(symbol ='circle', radius = 3,fillColor= '#FFFFFF', lineWidth = 2, lineColor = NULL))
+                     headerFormat = paste0( simpleCap(triple$labels$x),': <span style="color: #2b908f;font-weight:bold">{point.key}</span><br>',paste0( simpleCap(triple$labels$y), ": <br>"))) %>%
+          hc_plotOptions(series = list(events = list(legendItemClick =  sharelegend)))
+
       })
 
       if(missing(title)){
         threetitle<- triple$labels$title
+      }else{
+        threetitle<-title
       }
       browsable(
-        tags$h3( triple$labels$title, style =  "margin-left: 20px; text-align: left; font-family: Georgia;font-size:16px;padding: 0",
-
-                 tags$div(
-                   lapply(1:length(unique(trbl$facet)), function(i) {
-                     tags$div(style = paste0('width:',100/length(unique(trbl$facet)) , '%;display:block;float:left;'), plots3[i])
-                   }))))
+        tags$h3( threetitle, style =  "margin-left: 20px; text-align: left; font-family: Georgia;font-size:16px;padding: 0",
+                 tags$div(class= "hc-link-legend", style="display: flex;align-items: center;justify-content: center;",
+                          lapply(1:length(unique(trbl$facet)), function(i) {
+                            tags$div(style = paste0('width:250px;display:block;float:left;'), plots3[i])
+                          }))))
     } else{
       trbl<-trbl %>% mutate( labels =x)
       #   group_colors<-sample(col_vector,  length(unique(trbl$group)))
@@ -378,14 +403,16 @@ plot_highchart<-function(model, title, terms, type, colors, size){
       }
 
       plots3<- lapply(split(trbl, trbl$facet), function(data){
+        plotgroups<- split(data, data$group)
+
         end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[length(unique(trbl$facet))]]$facet, 'tail', 'nottail')
         end<-unique(end)
         order<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 1,
                       ifelse(unique(data$facet) == split(trbl, trbl$facet)[[2]]$facet, 2, 0  )        )
         order<-unique(order)
-        hchart(data, "line",
+        hchart(data, "line",           name =names(plotgroups), id=names(plotgroups),
                marker = list(enabled = FALSE), color =  group_colors, hcaes(x = labels , y = predicted,  group = group))%>%
-          hc_add_series(data, "arearange",
+          hc_add_series(data, "arearange",linkedTo=names(plotgroups),
                         fillOpacity= 0.08,         marker = list(enabled = FALSE),
                         color =  group_colors,
                         hcaes(x = "labels", group = group, low = conf.low, 2,
@@ -410,31 +437,36 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                               reserveSpace = FALSE,
                               y=0)) %>%
           hc_size(height = size, width=289 ) %>%
-        hc_yAxis(title=list(text =ifelse(order == 1 , simpleCap(triple$labels$y), ""),
-                            reserveSpace = FALSE,
-                            x=-2),
-                 labels = list(enabled = ifelse(order == 1, TRUE, FALSE)),
-                 max = max(trbl$conf.high), min=min(trbl$conf.low), labels = list(format = "{value}"))%>%
+          hc_yAxis(title=list(text =ifelse(order == 1 , simpleCap(triple$labels$y), ""),
+                              reserveSpace = FALSE,
+                              x=-2),
+                   labels = list(enabled = ifelse(order == 1, TRUE, FALSE)),
+                   max = max(trbl$conf.high), min=min(trbl$conf.low), labels = list(format = "{value}"))%>%
           hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
                      backgroundColor = "#f0f0f0",
                      valueDecimals=0,
                      shared = TRUE,
                      borderWidth = 0,pointFormat='<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f}</b><br/>',
-                     headerFormat = paste0( simpleCap(triple$labels$x),': <span style="color: #2b908f;font-weight:bold">{point.key}</span><br>',paste0( simpleCap(triple$labels$y), ": <br>")))
+                     headerFormat = paste0( simpleCap(triple$labels$x),': <span style="color: #2b908f;font-weight:bold">{point.key}</span><br>',paste0( simpleCap(triple$labels$y), ": <br>")))%>%
+          hc_plotOptions(series = list(events = list(legendItemClick = '')))
+
 
       })
       if(missing(title)){
         threetitle<- triple$labels$title
+      }else{
+        threetitle<-title
       }
       browsable(
         tags$h3( threetitle, style =  "margin-left: 20px; text-align: left; font-family: Georgia;font-size:16px;padding: 0",
 
-                 tags$div(
-                   lapply(1:length(unique(trbl$facet)), function(i) {
-                     tags$div(style = paste0('width:',100/length(unique(trbl$facet)) , '%;display:block;float:left;'), plots3[i])
-                   }))))
+                 tags$div(class="hc-link-legend",
+                          lapply(1:length(unique(trbl$facet)), function(i) {
+                            tags$div(style = paste0('width:250px;display:block;float:left;'), plots3[i])
+                          }))))
 
 
     }
   }
 }
+
