@@ -51,9 +51,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
   qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
   col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
 
-if(missing(title)){
-  threetitle<- triple$labels$title
-}
+
   if(missing(size)) {
     size <- 400
   } else{
@@ -358,6 +356,10 @@ if(missing(title)){
                         hcaes(x = "labels", y = "predicted", group = group),
                         marker = list(symbol ='circle', radius = 3,fillColor= '#FFFFFF', lineWidth = 2, lineColor = NULL))
       })
+
+      if(missing(title)){
+        threetitle<- triple$labels$title
+      }
       browsable(
         tags$h3( triple$labels$title, style =  "margin-left: 20px; text-align: left; font-family: Georgia;font-size:16px;padding: 0",
 
@@ -421,7 +423,9 @@ if(missing(title)){
                      headerFormat = paste0( simpleCap(triple$labels$x),': <span style="color: #2b908f;font-weight:bold">{point.key}</span><br>',paste0( simpleCap(triple$labels$y), ": <br>")))
 
       })
-
+      if(missing(title)){
+        threetitle<- triple$labels$title
+      }
       browsable(
         tags$h3( threetitle, style =  "margin-left: 20px; text-align: left; font-family: Georgia;font-size:16px;padding: 0",
 
