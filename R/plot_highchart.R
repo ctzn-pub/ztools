@@ -308,12 +308,12 @@ plot_highchart<-function(model, title, terms, type, colors, size){
     labels<- sort(get_x_labels(trbl))
 
     if (!is.null(labels)){
-      #   df<- as.data.frame(labels)
-      #  names(df)<- 'labels'
-      # df$x <- as.numeric(rownames(df))
-      #trbl<- left_join(trbl, df, by = "x")
+       df<- as.data.frame(labels)
+        names(df)<- 'labels'
+       df$x <- as.numeric(rownames(df))
+      trbl<- left_join(trbl, df, by = "x")
 
-      trbl<-trbl %>% mutate( labels =x)
+    #  trbl<-trbl %>% mutate( labels =x)
 
       # trbl<-trbl %>% mutate( labels = ifelse(x == 1, labels[1],labels[2]))
       #group_colors<-sample(col_vector,  length(unique(trbl$group)))
@@ -421,7 +421,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
         tags$div(class= "hc-link-legend",
                  tags$div(
                    tags$h3( threetitle, style =  "font-size: 27px !important;margin-left: 10px;margin-right: 20px; margin-top:0; text-align: left; font-family: Georgia;font-size:16px;padding: 0"),
-                   style="padding-left: 61px;display: flex;align-items: center;justify-content: left; ",tags$div(plots0, style="width:300px;")),
+                   style="padding-left: 61px;display: flex;align-items: center;justify-content: left; ",tags$div(plots0, style="width:400px;")),
 
                  tags$div(
                    style="display: flex;align-items: center;justify-content: center;",
