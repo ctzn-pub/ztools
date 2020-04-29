@@ -351,7 +351,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                     x=0,y=0, padding =0,margin=0,
                     verticalAlign='top',
                     layout='horizontal',
-                    title = list(text =simpleCap(triple$labels$shape))) %>%  hc_size(width=300, height=84) %>%
+                    title = list(text =simpleCap(triple$labels$shape))) %>%  hc_size(width=600, height=84) %>%
           hc_plotOptions(series = list(events = list(legendItemClick =  sharelegend)))
       })
 
@@ -421,7 +421,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
         tags$div(class= "hc-link-legend",
                  tags$div(
                    tags$h3( threetitle, style =  "font-size: 27px !important;margin-left: 10px;margin-right: 20px; margin-top:0; text-align: left; font-family: Georgia;font-size:16px;padding: 0"),
-                   style="padding-left: 61px;display: flex;align-items: center;justify-content: left; ",tags$div(plots0, style="width:400px;")),
+                   style="padding-left: 61px;display: flex;align-items: center;justify-content: left; ",tags$div(plots0, style="width:600px;")),
 
                  tags$div(
                    style="display: flex;align-items: center;justify-content: center;",
