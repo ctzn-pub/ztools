@@ -308,10 +308,19 @@ plot_highchart<-function(model, title, terms, type, colors, size){
     labels<- sort(get_x_labels(trbl))
 
     if (!is.null(labels)){
-       df<- as.data.frame(labels)
+
+
+
+
+      if(length(setdiff(labels, unique(trbl$x))) == 0){
+        trbl<-trbl %>% mutate(labels =x)
+      }else{
+        df<- as.data.frame(labels)
         names(df)<- 'labels'
-       df$x <- as.numeric(rownames(df))
-      trbl<- left_join(trbl, df, by = "x")
+        df$x <- as.numeric(rownames(df))
+        trbl<- left_join(trbl, df, by = "x")
+      }
+
 
     #  trbl<-trbl %>% mutate( labels =x)
 
