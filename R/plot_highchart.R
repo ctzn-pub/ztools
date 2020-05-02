@@ -28,6 +28,7 @@
 #'plot_highchart(fit,  terms = c("c161sex", "barthtot [30,50,70]"), color = c("red", "pink", "blue"))
 #'
 #' @export
+
 plot_highchart<-function(model, title, terms, type, colors, size){
   library(manipulateWidget)
   library(sjPlot)
@@ -223,6 +224,10 @@ plot_highchart<-function(model, title, terms, type, colors, size){
       df$x <- as.numeric(rownames(df))
       dbl<- left_join(dbl, df, by = "x")
       #  dbl<-dbl %>% mutate( labels = ifelse(x == 1, labels[1],labels[2]))
+      dbl$predicted<- round(dbl$predicted*100, digits=2)
+      dbl$`conf.low`<- round(dbl$`conf.low`*100, digits=2)
+      dbl$`conf.high`<- round(dbl$`conf.high`*100, digits=2)
+
       doublecont<-hchart(dbl, "line", color =group_colors, hcaes(x = labels , y = predicted,  group = group))%>%
         hc_add_series(dbl, "errorbar", color =group_colors,
                       hcaes(x = "labels", group = group, low = 'round(conf.low, 2)',
@@ -244,7 +249,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                   title = list(text =simpleCap(double$labels$shape))) %>%
         hc_xAxis(title=list(text=simpleCap(double$labels$x))) %>%
         hc_yAxis(title = list(text = paste0(double$labels$y)),
-                 labels = list(format = "{value}"))%>%
+                 labels = list(format = "{value}%"))%>%
         hc_size(height = size,width=289 ) %>%
 
         hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
@@ -253,7 +258,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                    shared = TRUE,
                    borderWidth = 0,
                    headerFormat = paste0("Predicted <b>", 'Value' , '</b> <br> <span style="color: #2b908f;font-weight:bold">{point.key}</span>') ,
-                   pointFormat = ": {point.y:.2f}") %>%
+                   pointFormat = ": {point.y:.2f}%") %>%
         hc_add_series(dbl,"scatter",
                       showInLegend = FALSE, color =group_colors,
                       hcaes(x = "labels", y = "predicted", group = group),
@@ -266,7 +271,9 @@ plot_highchart<-function(model, title, terms, type, colors, size){
       }else{
         threetitle<-title
       }
-
+      dbl$predicted<- round(dbl$predicted*100, digits=2)
+      dbl$`conf.low`<- round(dbl$`conf.low`*100, digits=2)
+      dbl$`conf.high`<- round(dbl$`conf.high`*100, digits=2)
       doublecont<-  hchart(dbl, "line", color =group_colors, marker = list(enabled = FALSE), hcaes(x = labels , y = predicted,  group = group))%>%
         hc_add_series(dbl, "arearange", color =group_colors,fillOpacity= 0.08, marker = list(enabled = FALSE),
                       hcaes(x = "labels", group = group, low = 'round(conf.low, 2)',
@@ -290,13 +297,13 @@ plot_highchart<-function(model, title, terms, type, colors, size){
         hc_size(height = size,width=289 ) %>%
 
         hc_yAxis(title = list(text = paste0(double$labels$y)),
-                 labels = list(format = "{value}"))%>%
+                 labels = list(format = "{value}%"))%>%
         hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
                    backgroundColor = "#f0f0f0",
                    valueDecimals=0,
                    shared = TRUE,
                    borderWidth = 0,
-                   borderWidth = 0,pointFormat='<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f}</b><br/>',
+                   borderWidth = 0,pointFormat='<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f}%</b><br/>',
                    headerFormat = paste0( simpleCap(double$labels$x),': <span style="color: #2b908f;font-weight:bold">{point.key}</span><br>',paste0( simpleCap(double$labels$y), ": <br>") ))
 
 
@@ -338,7 +345,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
       }
 
 
-    #  trbl<-trbl %>% mutate( labels =x)
+      #  trbl<-trbl %>% mutate( labels =x)
 
       # trbl<-trbl %>% mutate( labels = ifelse(x == 1, labels[1],labels[2]))
       #group_colors<-sample(col_vector,  length(unique(trbl$group)))
@@ -349,6 +356,10 @@ plot_highchart<-function(model, title, terms, type, colors, size){
       } else{
         group_colors<-colors
       }
+      trbl$predicted<- round(trbl$predicted*100, digits=2)
+      trbl$`conf.low`<- round(trbl$`conf.low`*100, digits=2)
+      trbl$`conf.high`<- round(trbl$`conf.high`*100, digits=2)
+
       plots0<- lapply(split(trbl, trbl$facet)[1], function(data){
         plotgroups<- split(data, data$group)
         end<-ifelse(unique(data$facet) == split(trbl, trbl$facet)[[1]]$facet, 'tail', 'nottail')
@@ -430,7 +441,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                      valueDecimals=0,
                      shared = TRUE,
                      borderWidth = 0,
-                     borderWidth = 0,pointFormat='<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f}</b><br/>',
+                     borderWidth = 0,pointFormat='<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f}%</b><br/>',
                      headerFormat = paste0( simpleCap(triple$labels$x),': <span style="color: #2b908f;font-weight:bold">{point.key}</span><br>',paste0( simpleCap(triple$labels$y), ": <br>"))) %>%
           hc_plotOptions(series = list(events = list(legendItemClick =  sharelegend)))
 
@@ -464,6 +475,9 @@ plot_highchart<-function(model, title, terms, type, colors, size){
       } else{
         group_colors<-colors
       }
+      trbl$predicted<- round(trbl$predicted*100, digits=2)
+      trbl$`conf.low`<- round(trbl$`conf.low`*100, digits=2)
+      trbl$`conf.high`<- round(trbl$`conf.high`*100, digits=2)
 
       plots3<- lapply(split(trbl, trbl$facet), function(data){
         plotgroups<- split(data, data$group)
@@ -504,12 +518,12 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                               reserveSpace = FALSE,
                               x=-2),
                    labels = list(enabled = ifelse(order == 1, TRUE, FALSE)),
-                   max = max(trbl$conf.high), min=min(trbl$conf.low), labels = list(format = "{value}"))%>%
+                   max = max(trbl$conf.high), min=min(trbl$conf.low), labels = list(format = "{value}%"))%>%
           hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
                      backgroundColor = "#f0f0f0",
                      valueDecimals=0,
                      shared = TRUE,
-                     borderWidth = 0,pointFormat='<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f}</b><br/>',
+                     borderWidth = 0,pointFormat='<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f}%</b><br/>',
                      headerFormat = paste0( simpleCap(triple$labels$x),': <span style="color: #2b908f;font-weight:bold">{point.key}</span><br>',paste0( simpleCap(triple$labels$y), ": <br>")))%>%
           hc_plotOptions(series = list(events = list(legendItemClick = '')))
 
@@ -532,5 +546,6 @@ plot_highchart<-function(model, title, terms, type, colors, size){
     }
   }
 }
+
 
 
