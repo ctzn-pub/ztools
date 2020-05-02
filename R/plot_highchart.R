@@ -6,7 +6,7 @@
 #'
 #' @param terms
 #'
-#'Desired terms
+#'The terms
 #'
 #' @param size
 #' height in px!

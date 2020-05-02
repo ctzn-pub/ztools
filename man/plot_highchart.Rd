@@ -4,16 +4,18 @@
 \alias{plot_highchart}
 \title{Highcharts for SJPlot outputs from a regression}
 \usage{
-plot_highchart(model, terms, type, colors, size)
+plot_highchart(model, title, terms, type, colors, size)
 }
 \arguments{
 \item{model}{An model object}
 
-\item{terms}{Desired terms}
+\item{terms}{The terms}
 
 \item{type}{Optional, defaults to 'eff' but can also be 'pred' if specified.}
 
 \item{colors}{optional vectors of colors c("#9A32CD", "#FF3030", "#7FFFD4")}
+
+\item{size}{height in px!}
 }
 \description{
 Highcharts for SJPlot outputs from a regression

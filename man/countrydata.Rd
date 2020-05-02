@@ -5,11 +5,13 @@
 \alias{countrydata}
 \title{Our Country Metadata
 Our personal country-metdata}
-\format{A data frame with 261 rows and 74 variables:
+\format{
+A data frame with 261 rows and 74 variables:
 \describe{
   \item{Region Name}{Coming soon}
   ...
-}}
+}
+}
 \usage{
 countrydata
 }

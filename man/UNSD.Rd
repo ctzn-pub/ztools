@@ -4,12 +4,14 @@
 \name{UNSD}
 \alias{UNSD}
 \title{UNSD Data}
-\format{A data frame with 249 rows and 15 variables:
+\format{
+A data frame with 249 rows and 15 variables:
 \describe{
   \item{Sub-region Name}{Sub-continental name (eg, Southern Europe)}
   \item{Region Name}{Continent}
   ...
-}}
+}
+}
 \source{
 \url{https://unstats.un.org/unsd/methodology/m49/overview/}
 }

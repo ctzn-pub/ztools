@@ -17,15 +17,6 @@ tabs(tabID, list_of_tabs, list_of_widgets, height)
 \item{height}{Desired height.}
 
 \item{icon}{optional; takes a fontawesome identifier to add an icon}
-
-\item{tabID}{A number, 1-9 (needs a unique ID to distinguish from other tabsets
-)}
-
-\item{list_of_tabs}{A list of named vectors with a tab title & url for content}
-
-\item{height}{Desired height.}
-
-\item{icon}{optional; takes a fontawesome identifier to add an icon}
 }
 \description{
 Our tabets, made for Distill articles in R markdown. Returns the HTML code needed to load various scripts used and takes a list of tab names/iframe content as arguments.

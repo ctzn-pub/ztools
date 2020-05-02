@@ -5,11 +5,19 @@
 \alias{globalMapData}
 \title{Global Map List Object
 Downloaded highcharts map-data objects}
-\format{A list
+\format{
+A list
 \describe{
   \item{Global Map Data}{Coming soon}
   ...
-}}
+}
+
+A list
+\describe{
+  \item{Europe Map Data}{Coming soon}
+  ...
+}
+}
 \usage{
 globalMapData
 
