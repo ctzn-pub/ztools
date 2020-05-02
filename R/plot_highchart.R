@@ -206,7 +206,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
       group_colors<-colors
     }
 
-    labels<- sort(get_x_labels(dbl))
+    labels<- get_x_labels(dbl)
 
 
     if (!is.null(labels)){
@@ -321,7 +321,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
 
     trbl<- triple$data
 
-    labels<- sort(get_x_labels(trbl))
+    labels<-get_x_labels(trbl)
 
     if (!is.null(labels)){
 
