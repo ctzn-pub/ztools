@@ -208,8 +208,17 @@ plot_highchart<-function(model, title, terms, type, colors, size){
 
     labels<- sort(get_x_labels(dbl))
 
+
     if (!is.null(labels)){
       df<- as.data.frame(labels)
+
+      if(missing(title)){
+        threetitle<- double$labels$title
+      }else{
+        threetitle<-title
+      }
+
+
       names(df)<- 'labels'
       df$x <- as.numeric(rownames(df))
       dbl<- left_join(dbl, df, by = "x")
@@ -222,7 +231,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                       showInLegend = FALSE)%>%
         hc_exporting(enabled = FALSE)%>%
         hc_add_theme(hc_theme_ctzn())%>%
-        hc_title(text = double$labels$title,
+        hc_title(text = threetitle,
                  style = list(fontSize = "14px"),
                  align = "left")%>%
         hc_subtitle(text = double$labels$subtitle,
@@ -251,6 +260,13 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                       marker = list(symbol ='circle', radius = 3,fillColor= '#FFFFFF', lineWidth = 2, lineColor = NULL))
     }else{
       dbl<-dbl %>% mutate( labels = x)
+
+      if(missing(title)){
+        threetitle<- double$labels$title
+      }else{
+        threetitle<-title
+      }
+
       doublecont<-  hchart(dbl, "line", color =group_colors, marker = list(enabled = FALSE), hcaes(x = labels , y = predicted,  group = group))%>%
         hc_add_series(dbl, "arearange", color =group_colors,fillOpacity= 0.08, marker = list(enabled = FALSE),
                       hcaes(x = "labels", group = group, low = 'round(conf.low, 2)',
@@ -259,7 +275,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                       showInLegend = FALSE)%>%
         hc_exporting(enabled = FALSE)%>%
         hc_add_theme(hc_theme_ctzn())%>%
-        hc_title(text = double$labels$title,
+        hc_title(text = threetitle,
                  style = list(fontSize = "14px"),
                  align = "left")%>%
         hc_subtitle(text = double$labels$subtitle,
