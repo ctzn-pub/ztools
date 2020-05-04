@@ -254,7 +254,7 @@ plot_highchart<-function(model, title, xaxistitle, terms, type, colors, size){
                   verticalAlign='bottom',
                   layout='horizontal',
                   title = list(text =simpleCap(double$labels$shape))) %>%
-        hc_xAxis(title=list(text=ifelse(xaxistitle,
+        hc_xAxis(title=list(text=ifelse(missing(xaxistitle),
                               simpleCap(double$labels$x), NULL)
 
                             )) %>%
@@ -303,7 +303,7 @@ plot_highchart<-function(model, title, xaxistitle, terms, type, colors, size){
                   verticalAlign='bottom',
                   layout='horizontal',
                   title = list(text =simpleCap(double$labels$shape))) %>%
-        hc_xAxis(title=list(text=ifelse(xaxistitle,
+        hc_xAxis(title=list(text=ifelse(missing(xaxistitle),
                                         simpleCap(double$labels$x), NULL)
 
         )) %>%
