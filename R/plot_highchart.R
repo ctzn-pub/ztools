@@ -5,7 +5,10 @@
 #'An model object
 #'
 #'@param xaxistitle
-#'boolean for whether or not to show the xaxis title
+#' boolean for whether or not to show the xaxis title
+#'
+#'@param legends
+#' boolean for whether or not to show the legends
 #'
 #' @param terms
 #'
@@ -32,7 +35,7 @@
 #'
 #' @export
 
-plot_highchart<-function(model, title, xaxistitle, terms, type, colors, size){
+plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, size){
   library(manipulateWidget)
   library(sjPlot)
   library(sjmisc)
@@ -56,15 +59,19 @@ plot_highchart<-function(model, title, xaxistitle, terms, type, colors, size){
   col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
 
 
+  if(missing(legends)) {
+    legends <- TRUE
+  } else{
+    legends<-legends
+  }
+
+
+
   if(missing(size)) {
     size <- 400
   } else{
     size<-size
   }
-
-
-
-
 
 
 
@@ -235,6 +242,15 @@ plot_highchart<-function(model, title, xaxistitle, terms, type, colors, size){
       dbl$`conf.low`<- round(dbl$`conf.low`*100, digits=2)
       dbl$`conf.high`<- round(dbl$`conf.high`*100, digits=2)
 
+
+
+
+      if(missing(xaxistitle)) {
+        xaxistitle <-simpleCap(double$labels$x)
+      } else{
+        xaxistitle<-NULL
+      }
+
       doublecont<-hchart(dbl, "line", color =group_colors, hcaes(x = labels , y = predicted,  group = group))%>%
         hc_add_series(dbl, "errorbar", color =group_colors,
                       hcaes(x = "labels", group = group, low = 'round(conf.low, 2)',
@@ -249,15 +265,12 @@ plot_highchart<-function(model, title, xaxistitle, terms, type, colors, size){
         hc_subtitle(text = double$labels$subtitle,
                     style = list(fontSize = "10px"),
                     align = "left")%>%
-        hc_legend(enabled = TRUE,
+        hc_legend(enabled = legends,
                   align= 'center',
                   verticalAlign='bottom',
                   layout='horizontal',
                   title = list(text =simpleCap(double$labels$shape))) %>%
-        hc_xAxis(title=list(text=ifelse(missing(xaxistitle),
-                              simpleCap(double$labels$x), NULL)
-
-                            )) %>%
+        hc_xAxis(title=list(text=xaxistitle)) %>%
         hc_yAxis(title = list(text = paste0(double$labels$y)),
                  labels = list(format = "{value}%"))%>%
         hc_size(height = size,width=289 ) %>%
@@ -298,15 +311,12 @@ plot_highchart<-function(model, title, xaxistitle, terms, type, colors, size){
         hc_subtitle(text = double$labels$subtitle,
                     style = list(fontSize = "10px"),
                     align = "left")%>%
-        hc_legend(enabled = TRUE,
+        hc_legend(enabled = legends,
                   align= 'center',
                   verticalAlign='bottom',
                   layout='horizontal',
                   title = list(text =simpleCap(double$labels$shape))) %>%
-        hc_xAxis(title=list(text=ifelse(missing(xaxistitle),
-                                        simpleCap(double$labels$x), NULL)
-
-        )) %>%
+        hc_xAxis(title=list(text=xaxistitle)) %>%
         hc_size(height = size,width=289 ) %>%
 
         hc_yAxis(title = list(text = paste0(double$labels$y)),
