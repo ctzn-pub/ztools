@@ -4,6 +4,9 @@
 #'
 #'An model object
 #'
+#'@param xaxistitle
+#'boolean for whether or not to show the xaxis title
+#'
 #' @param terms
 #'
 #'The terms
@@ -29,7 +32,7 @@
 #'
 #' @export
 
-plot_highchart<-function(model, title, terms, type, colors, size){
+plot_highchart<-function(model, title, xaxistitle, terms, type, colors, size){
   library(manipulateWidget)
   library(sjPlot)
   library(sjmisc)
@@ -58,6 +61,10 @@ plot_highchart<-function(model, title, terms, type, colors, size){
   } else{
     size<-size
   }
+
+
+
+
 
 
 
@@ -238,7 +245,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
         hc_add_theme(hc_theme_ctzn())%>%
         hc_title(text = threetitle,
                  style = list(fontSize = "14px"),
-                 align = "left")%>%
+                 align = "center")%>%
         hc_subtitle(text = double$labels$subtitle,
                     style = list(fontSize = "10px"),
                     align = "left")%>%
@@ -247,7 +254,10 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                   verticalAlign='bottom',
                   layout='horizontal',
                   title = list(text =simpleCap(double$labels$shape))) %>%
-        hc_xAxis(title=list(text=simpleCap(double$labels$x))) %>%
+        hc_xAxis(title=list(text=ifelse(xaxistitle,
+                              simpleCap(double$labels$x), NULL)
+
+                            )) %>%
         hc_yAxis(title = list(text = paste0(double$labels$y)),
                  labels = list(format = "{value}%"))%>%
         hc_size(height = size,width=289 ) %>%
@@ -284,7 +294,7 @@ plot_highchart<-function(model, title, terms, type, colors, size){
         hc_add_theme(hc_theme_ctzn())%>%
         hc_title(text = threetitle,
                  style = list(fontSize = "14px"),
-                 align = "left")%>%
+                 align = center)%>%
         hc_subtitle(text = double$labels$subtitle,
                     style = list(fontSize = "10px"),
                     align = "left")%>%
@@ -293,7 +303,10 @@ plot_highchart<-function(model, title, terms, type, colors, size){
                   verticalAlign='bottom',
                   layout='horizontal',
                   title = list(text =simpleCap(double$labels$shape))) %>%
-        hc_xAxis(title=list(text=simpleCap(double$labels$x))) %>%
+        hc_xAxis(title=list(text=ifelse(xaxistitle,
+                                        simpleCap(double$labels$x), NULL)
+
+        )) %>%
         hc_size(height = size,width=289 ) %>%
 
         hc_yAxis(title = list(text = paste0(double$labels$y)),

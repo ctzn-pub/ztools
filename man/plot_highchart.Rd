@@ -4,10 +4,12 @@
 \alias{plot_highchart}
 \title{Highcharts for SJPlot outputs from a regression}
 \usage{
-plot_highchart(model, title, terms, type, colors, size)
+plot_highchart(model, title, xaxistitle, terms, type, colors, size)
 }
 \arguments{
 \item{model}{An model object}
+
+\item{xaxistitle}{boolean for whether or not to show the xaxis title}
 
 \item{terms}{The terms}
 
