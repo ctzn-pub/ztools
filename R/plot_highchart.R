@@ -234,9 +234,19 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
       }
 
 
-      names(df)<- 'labels'
-      df$x <- as.numeric(rownames(df))
-      dbl<- left_join(dbl, df, by = "x")
+
+      if(length(setdiff(labels, unique(dbl$x))) == 0){
+        dbl<-dbl %>% mutate(labels =x)
+      }else{
+        #  df<- as.data.frame(labels)
+        #   names(df)<- 'labels'
+        # df$x <- as.numeric(rownames(df))
+        #trbl<- left_join(trbl, df, by = "x")
+        dbl$labels<- labels
+      }
+      #    names(df)<- 'labels'
+      #   df$x <- as.numeric(rownames(df))
+      #  dbl<- left_join(dbl, df, by = "x")
       #  dbl<-dbl %>% mutate( labels = ifelse(x == 1, labels[1],labels[2]))
       dbl$predicted<- round(dbl$predicted*100, digits=2)
       dbl$`conf.low`<- round(dbl$`conf.low`*100, digits=2)
@@ -361,10 +371,11 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
       if(length(setdiff(labels, unique(trbl$x))) == 0){
         trbl<-trbl %>% mutate(labels =x)
       }else{
-        df<- as.data.frame(labels)
-        names(df)<- 'labels'
-        df$x <- as.numeric(rownames(df))
-        trbl<- left_join(trbl, df, by = "x")
+        #  df<- as.data.frame(labels)
+        #   names(df)<- 'labels'
+        # df$x <- as.numeric(rownames(df))
+        #trbl<- left_join(trbl, df, by = "x")
+        trbl$labels<- labels
       }
 
 
@@ -569,6 +580,5 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
     }
   }
 }
-
 
 
