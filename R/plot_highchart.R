@@ -210,7 +210,7 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
     double<- plot_model(model, type = type, terms =terms)
     if(length(levels(double$data$group)) == length(levels(model$model[[terms[2]]]))){  double$data$group <- factor(double$data$group,  levels = levels(model$model[[terms[2]]]))  }
     l3<- levels(double$data$group)
-    l4<- levels(model$model[[stringr::word(terms[2])]])
+    l4<- levels(as.factor(model$model[[stringr::word(terms[2])]]))
     l4<-subset(l4, l4 %in% l3)
     double$data$group <- factor(double$data$group,  levels = l4)
     dbl<- double$data
