@@ -208,6 +208,8 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
     singleplot
   } else if (length(terms) == 2){
     double<- plot_model(model, type = type, terms =terms)
+
+
     if(length(levels(double$data$group)) == length(levels(model$model[[terms[2]]]))){  double$data$group <- factor(double$data$group,  levels = levels(model$model[[terms[2]]]))  }
     l3<- levels(double$data$group)
     l4<- levels(as.factor(model$model[[stringr::word(terms[2])]]))
@@ -260,9 +262,10 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
       } else{
         xaxistitle<-NULL
       }
+      plotgroups<- split(dbl, dbl$group)
 
-      doublecont<-hchart(dbl, "line", color =group_colors, hcaes(x = labels , y = predicted,  group = group))%>%
-        hc_add_series(dbl, "errorbar", color =group_colors,
+      doublecont<-hchart(dbl, "line", color =group_colors,id=names(plotgroups), hcaes(x = labels , y = predicted,  group = group))%>%
+        hc_add_series(dbl, "errorbar", color =group_colors, linkedTo=names(plotgroups),
                       hcaes(x = "labels", group = group, low = 'round(conf.low, 2)',
                             high = 'round(conf.high, 2)'),
                       enableMouseTracking = FALSE,
@@ -292,7 +295,7 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
                    borderWidth = 0,
                    headerFormat = paste0("Predicted <b>", 'Value' , '</b> <br> <span style="color: #2b908f;font-weight:bold">{point.key}</span>') ,
                    pointFormat = ": {point.y:.2f}%") %>%
-        hc_add_series(dbl,"scatter",
+        hc_add_series(dbl,"scatter", linkedTo=names(plotgroups),
                       showInLegend = FALSE, color =group_colors,
                       hcaes(x = "labels", y = "predicted", group = group),
                       marker = list(symbol ='circle', radius = 3,fillColor= '#FFFFFF', lineWidth = 2, lineColor = NULL))
@@ -580,5 +583,6 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
     }
   }
 }
+
 
 
