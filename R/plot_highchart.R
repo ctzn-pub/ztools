@@ -250,9 +250,9 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
       #   df$x <- as.numeric(rownames(df))
       #  dbl<- left_join(dbl, df, by = "x")
       #  dbl<-dbl %>% mutate( labels = ifelse(x == 1, labels[1],labels[2]))
-      dbl$predicted<- round(dbl$predicted*100, digits=2)
-      dbl$`conf.low`<- round(dbl$`conf.low`*100, digits=2)
-      dbl$`conf.high`<- round(dbl$`conf.high`*100, digits=2)
+      dbl$predicted<- round(dbl$predicted*1, digits=2)
+      dbl$`conf.low`<- round(dbl$`conf.low`*1, digits=2)
+      dbl$`conf.high`<- round(dbl$`conf.high`*1, digits=2)
 
 
 
@@ -294,7 +294,7 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
                    shared = TRUE,
                    borderWidth = 0,
                    headerFormat = paste0("Predicted <b>", 'Value' , '</b> <br> <span style="color: #2b908f;font-weight:bold">{point.key}</span>') ,
-                   pointFormat = ": {point.y:.2f}%") %>%
+                   pointFormat = ": {point.y:.2f}") %>%
         hc_add_series(dbl,"scatter", linkedTo=names(plotgroups),
                       showInLegend = FALSE, color =group_colors,
                       hcaes(x = "labels", y = "predicted", group = group),
