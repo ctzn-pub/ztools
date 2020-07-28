@@ -285,7 +285,7 @@ plot_highchart<-function(model,legends, title, xaxistitle, terms, type, colors, 
                   title = list(text =simpleCap(double$labels$shape))) %>%
         hc_xAxis(title=list(text=xaxistitle)) %>%
         hc_yAxis(title = list(text = paste0(double$labels$y)),
-                 labels = list(format = "{value}%"))%>%
+                 labels = list(format = "{value}"))%>%
         hc_size(height = size,width=289 ) %>%
 
         hc_tooltip(crosshairs= list(enabled= TRUE,  color=hex_to_rgba("#2b908f", alpha = .15)),
